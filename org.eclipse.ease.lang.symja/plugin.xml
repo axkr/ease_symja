@@ -64,7 +64,7 @@
    <extension
          point="org.eclipse.ease.language">
       <engine
-            class="org.eclipse.ease.lang.symja.SymjaEngine"
+            class="org.eclipse.ease.lang.symja.SymjaReplScriptEngine"
             id="org.eclipse.ease.lang.symja.engine"
             name="Symja"
             priority="10">
