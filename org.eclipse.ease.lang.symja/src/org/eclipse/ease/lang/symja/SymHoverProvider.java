@@ -53,7 +53,9 @@ public class SymHoverProvider implements ITextHover {
 				}
 				StringBuilder buf = new StringBuilder();
 				Documentation.printDocumentation(buf, searchStr);
-				return generateHTMLString(buf.toString());
+				return buf.toString();
+				// TODO <- display as HTML
+//				return generateHTMLString(buf.toString());
 			}
 		}
 		return "";
