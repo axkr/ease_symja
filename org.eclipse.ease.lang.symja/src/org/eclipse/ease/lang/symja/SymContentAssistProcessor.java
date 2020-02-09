@@ -1,9 +1,6 @@
 package org.eclipse.ease.lang.symja;
 
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IProjectNatureDescriptor;
-import org.eclipse.core.resources.IWorkspace;
-import org.eclipse.core.resources.ResourcesPlugin;
+import java.util.List;
 
 import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.jface.text.contentassist.CompletionProposal;
@@ -11,59 +8,70 @@ import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
 import org.eclipse.jface.text.contentassist.IContextInformation;
 import org.eclipse.jface.text.contentassist.IContextInformationValidator;
+import org.matheclipse.core.builtin.IOFunctions;
+import org.matheclipse.core.convert.AST2Expr;
 
 public class SymContentAssistProcessor implements IContentAssistProcessor {
 
-    @Override
-    public ICompletionProposal[] computeCompletionProposals(ITextViewer viewer, int offset) {
-    	// TODO this is logic for .project file to complete on nature and project references. Replace with your language logic!
-        String text = viewer.getDocument().get();
-        String natureTag= "<nature>";
-        String projectReferenceTag="<project>";
-        IWorkspace workspace = ResourcesPlugin.getWorkspace();
-        if (text.length() >= natureTag.length() && text.substring(offset - natureTag.length(), offset).equals(natureTag)) {
-            IProjectNatureDescriptor[] natureDescriptors= workspace.getNatureDescriptors();
-            ICompletionProposal[] proposals = new ICompletionProposal[natureDescriptors.length];
-            for (int i= 0; i < natureDescriptors.length; i++) {
-                IProjectNatureDescriptor descriptor= natureDescriptors[i];
-                proposals[i] = new CompletionProposal(descriptor.getNatureId(), offset, 0, descriptor.getNatureId().length());
-            }
-            return proposals;
-        }
-        if (text.length() >= projectReferenceTag.length() && text.substring(offset - projectReferenceTag.length(), offset).equals(projectReferenceTag)) {
-            IProject[] projects= workspace.getRoot().getProjects();
-            ICompletionProposal[] proposals = new ICompletionProposal[projects.length];
-            for (int i= 0; i < projects.length; i++) {
-                proposals[i]=new CompletionProposal(projects[i].getName(), offset, 0, projects[i].getName().length());
-            }
-            return proposals;
-        }
-        return new ICompletionProposal[0];
-    }
+	@Override
+	public ICompletionProposal[] computeCompletionProposals(ITextViewer viewer, int offset) {
+		String text = viewer.getDocument().get();
+		if (text.length() >= 1 && offset <= text.length()) {
+			String searchStr;
+			int indx = offset - 1;
+			while (indx >= 0) {
+				if (Character.isJavaIdentifierPart(text.charAt(indx))) {
+					indx--;
+				} else {
+					break;
+				}
+			}
+			indx++;
+			if (indx < offset && indx >= 0) {
+				searchStr = text.substring(indx, offset).toLowerCase();
+				// System.out.println(searchStr);
+				List<String> list = IOFunctions.getAutoCompletionList(searchStr);
+				if (list.size() > 0) {
+					SymjaReplScriptEngine.initialize();
+					ICompletionProposal[] proposals = new ICompletionProposal[list.size()];
+					for (int i = 0; i < list.size(); i++) {
+						String str = list.get(i);
+						String symbol = AST2Expr.PREDEFINED_SYMBOLS_MAP.get(str);
+						if (symbol != null) {
+							str = symbol;
+						}
+						proposals[i] = new CompletionProposal(str, indx, offset - indx, str.length());
+					}
+					return proposals;
+				}
+			}
+		}
+		return new ICompletionProposal[0];
+	}
 
-    @Override
-    public IContextInformation[] computeContextInformation(ITextViewer viewer, int offset) {
-        return null;
-    }
+	@Override
+	public IContextInformation[] computeContextInformation(ITextViewer viewer, int offset) {
+		return null;
+	}
 
-    @Override
-    public char[] getCompletionProposalAutoActivationCharacters() {
-        return new char[] { '"' }; //NON-NLS-1
-    }
+	@Override
+	public char[] getCompletionProposalAutoActivationCharacters() {
+		return new char[] { '"' }; // NON-NLS-1
+	}
 
-    @Override
-    public char[] getContextInformationAutoActivationCharacters() {
-        return null;
-    }
+	@Override
+	public char[] getContextInformationAutoActivationCharacters() {
+		return null;
+	}
 
-    @Override
-    public String getErrorMessage() {
-        return null;
-    }
+	@Override
+	public String getErrorMessage() {
+		return null;
+	}
 
-    @Override
-    public IContextInformationValidator getContextInformationValidator() {
-        return null;
-    }
+	@Override
+	public IContextInformationValidator getContextInformationValidator() {
+		return null;
+	}
 
 }

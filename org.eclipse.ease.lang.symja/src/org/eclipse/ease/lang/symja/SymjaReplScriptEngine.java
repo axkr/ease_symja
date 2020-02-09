@@ -323,12 +323,9 @@ public class SymjaReplScriptEngine extends AbstractReplScriptEngine {
 
 	@Override
 	protected void setupEngine() throws ScriptEngineException {
-		Config.PARSER_USE_LOWERCASE_SYMBOLS = true;
-		Config.USE_VISJS = true;
-		Config.FILESYSTEM_ENABLED = true;
+		initialize();
 		stdout = getOutputStream();
 		stderr = getErrorStream();
-		F.initSymbols(null, null, true);
 		fEvaluator = new ExprEvaluator(false, 100);
 		fOutputFactory = OutputFormFactory.get(true, false, 5, 7);
 		fEvaluator.getEvalEngine().setFileSystemEnabled(true);
@@ -336,6 +333,13 @@ public class SymjaReplScriptEngine extends AbstractReplScriptEngine {
 		fInputFactory = OutputFormFactory.get(true, false, 5, 7);
 		fInputFactory.setQuotes(true);
 		printUsage();
+	}
+
+	public static void initialize() {
+		Config.PARSER_USE_LOWERCASE_SYMBOLS = true;
+		Config.USE_VISJS = true;
+		Config.FILESYSTEM_ENABLED = true;
+		F.initSymbols(null, null, true);
 	}
 
 }
