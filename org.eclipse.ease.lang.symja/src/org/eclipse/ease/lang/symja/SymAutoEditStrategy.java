@@ -10,20 +10,20 @@ public class SymAutoEditStrategy implements IAutoEditStrategy {
 
 	@Override
 	public void customizeDocumentCommand(IDocument document, DocumentCommand command) {
-		if (!">".equals(command.text)) { //NON-NLS-1
-			return;
-		}
-		try {
-			IRegion region = document.getLineInformationOfOffset(command.offset);
-			String line = document.get(region.getOffset(), command.offset - region.getOffset());
-			int index = line.lastIndexOf('<');
-			if (index != -1 && (index != line.length() - 1) && line.charAt(index + 1) != '/') {
-				String tag = line.substring(index + 1);
-				command.text += "</" + tag + command.text; //NON-NLS-1
-			}
-		} catch (BadLocationException e) {
-			// ignore
-		}
+//		if (!">".equals(command.text)) { //NON-NLS-1
+//			return;
+//		}
+//		try {
+//			IRegion region = document.getLineInformationOfOffset(command.offset);
+//			String line = document.get(region.getOffset(), command.offset - region.getOffset());
+//			int index = line.lastIndexOf('<');
+//			if (index != -1 && (index != line.length() - 1) && line.charAt(index + 1) != '/') {
+//				String tag = line.substring(index + 1);
+//				command.text += "</" + tag + command.text; //NON-NLS-1
+//			}
+//		} catch (BadLocationException e) {
+//			// ignore
+//		}
 	}
 
 }
