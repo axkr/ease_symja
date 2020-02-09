@@ -42,13 +42,16 @@ public class SymHoverProvider implements ITextHover {
 				}
 			}
 			if (startIndex < endIndex && startIndex >= 0) {
-				SymjaReplScriptEngine.initialize();
-				searchStr = text.substring(startIndex, endIndex).toLowerCase();
-				String keyWord = AST2Expr.PREDEFINED_SYMBOLS_MAP.get(searchStr);
-				if (keyWord != null) {
-					searchStr = keyWord;
+				SymjaEnvironementBootStrapper.initialize();
+				searchStr = text.substring(startIndex, endIndex);
+				if (searchStr.length() > 1) {
+					searchStr = searchStr.toLowerCase();
+					String keyWord = AST2Expr.PREDEFINED_SYMBOLS_MAP.get(searchStr);
+					if (keyWord != null) {
+						searchStr = keyWord;
+					}
 				}
-				StringBuilder buf=new StringBuilder();
+				StringBuilder buf = new StringBuilder();
 				Documentation.printDocumentation(buf, searchStr);
 				return generateHTMLString(buf.toString());
 			}
@@ -58,7 +61,7 @@ public class SymHoverProvider implements ITextHover {
 
 	@Override
 	public IRegion getHoverRegion(ITextViewer textViewer, int offset) {
-		String text = textViewer.getDocument().get(); 
+		String text = textViewer.getDocument().get();
 		if (text.length() >= 1 && offset <= text.length()) {
 			String searchStr;
 			int startIndex = offset - 1;
@@ -79,7 +82,7 @@ public class SymHoverProvider implements ITextHover {
 				}
 			}
 			if (startIndex < endIndex && startIndex >= 0) {
-				SymjaReplScriptEngine.initialize();
+				SymjaEnvironementBootStrapper.initialize();
 				searchStr = text.substring(startIndex, endIndex).toLowerCase();
 				String keyWord = AST2Expr.PREDEFINED_SYMBOLS_MAP.get(searchStr);
 				if (keyWord != null) {
@@ -89,12 +92,12 @@ public class SymHoverProvider implements ITextHover {
 		}
 		return new Region(offset, 0);
 	}
-	
+
 	public static String generateHTMLString(final String markdownStr) {
 		Set<Extension> EXTENSIONS = Collections.singleton(TablesExtension.create());
 		Parser parser = Parser.builder().extensions(EXTENSIONS).build();
 		Node document = parser.parse(markdownStr);
 		HtmlRenderer renderer = HtmlRenderer.builder().extensions(EXTENSIONS).build();
-		return renderer.render(document);  
+		return renderer.render(document);
 	}
 }

@@ -71,7 +71,7 @@ public class SymReconcilerStrategy implements IReconcilingStrategy, IReconciling
 
     private List<Position> getNewPositionsOfAnnotations(){
         List<Position> positions = new ArrayList<>();
-        Map<String, Integer> startOfAnnotation = new HashMap<>();
+//        Map<String, Integer> startOfAnnotation = new HashMap<>();
         SearchingFor searchingFor = SearchingFor.START_OF_TAG;
 
         int characters = document.getLength();
@@ -103,21 +103,21 @@ public class SymReconcilerStrategy implements IReconcilingStrategy, IReconciling
                 case END_OF_WORD:
                     if(!Character.isLetter(currentChar)) {
                         word = document.get(wordStartIndex, currentCharIndex - wordStartIndex);
-                        if(startOfAnnotation.containsKey(word)) {
-                            searchingFor = SearchingFor.END_OF_LINE;
-                        }else {
-                            startOfAnnotation.put(word, sectionStartIndex);
+//                        if(startOfAnnotation.containsKey(word)) {
+//                            searchingFor = SearchingFor.END_OF_LINE;
+//                        }else {
+//                            startOfAnnotation.put(word, sectionStartIndex);
                             searchingFor = SearchingFor.START_OF_TAG;
-                        }
+//                        }
                     }
                     break;
                 case END_OF_LINE:
                     if(currentChar == '\n') {
-                        int start = startOfAnnotation.get(word);
-                        if(document.getLineOfOffset(start) != document.getLineOfOffset(currentCharIndex)) {
-                            positions.add(new Position(start,currentCharIndex + 1 - start));
-                        }
-                        startOfAnnotation.remove(word);
+//                        int start = startOfAnnotation.get(word);
+//                        if(document.getLineOfOffset(start) != document.getLineOfOffset(currentCharIndex)) {
+//                            positions.add(new Position(start,currentCharIndex + 1 - start));
+//                        }
+//                        startOfAnnotation.remove(word);
                         searchingFor = SearchingFor.START_OF_TAG;
                     }
                     break;

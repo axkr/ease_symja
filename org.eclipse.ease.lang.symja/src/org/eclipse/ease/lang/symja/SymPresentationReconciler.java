@@ -33,10 +33,8 @@ public class SymPresentationReconciler extends PresentationReconciler {
 	}
 
 	public SymPresentationReconciler() {
-		// TODO this is logic for .project file to color tags in blue. Replace with your
-		// language logic!
 		RuleBasedScanner scanner = new RuleBasedScanner();
-		IRule[] rules = new IRule[1];
+		IRule[] rules = new IRule[2];
 //		rules[1] = new SingleLineRule("<", ">", new Token(tagAttribute));
 //		rules[0] = new SingleLineRule("<?", "?>", new Token(headerAttribute));
 
@@ -46,12 +44,21 @@ public class SymPresentationReconciler extends PresentationReconciler {
 //		wordRule.addWord("D", wordToken);
 //		wordRule.addWord("E", wordToken);
 //		wordRule.addWord("I", wordToken);
-		SymjaReplScriptEngine.initialize();
+		SymjaEnvironementBootStrapper.initialize();
 		for (Map.Entry<String, String> elem : AST2Expr.PREDEFINED_SYMBOLS_MAP.entrySet()) {
-			wordRule.addWord(elem.getKey(), wordToken);
+			String key = elem.getKey();
+			if (key.length() > 1) {
+				wordRule.addWord(key, wordToken);
+			}
 		}
 		rules[0] = wordRule;
-
+		WordRule shortWordRule = new WordRule(new IdentifierDetector());
+		shortWordRule.addWord("C", wordToken);
+		shortWordRule.addWord("D", wordToken);
+		shortWordRule.addWord("E", wordToken);
+		shortWordRule.addWord("I", wordToken);
+		shortWordRule.addWord("N", wordToken);
+		rules[1] = shortWordRule;
 		scanner.setRules(rules);
 		DefaultDamagerRepairer dr = new DefaultDamagerRepairer(scanner);
 		this.setDamager(dr, IDocument.DEFAULT_CONTENT_TYPE);
