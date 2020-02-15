@@ -1,5 +1,9 @@
 package org.eclipse.ease.lang.symja;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Collections;
 import java.util.Set;
 
@@ -19,9 +23,41 @@ import org.eclipse.jface.text.Region;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.editors.text.EditorsUI;
 import org.matheclipse.core.convert.AST2Expr;
-import org.matheclipse.core.form.Documentation;
 
 public class SymHoverProvider implements ITextHover, ITextHoverExtension {
+
+	/**
+	 * TODO: replace with Documentation#getMarkdown()
+	 * 
+	 * @param out
+	 * @param symbolName
+	 * @return
+	 */
+	public static boolean getMarkdown(Appendable out, String symbolName) {
+		// read markdown file
+		String fileName = symbolName + ".md";
+
+		// Get file from resources folder
+		ClassLoader classloader = Thread.currentThread().getContextClassLoader();
+
+		try {
+			InputStream is = classloader.getResourceAsStream(fileName);
+			if (is != null) {
+				final BufferedReader f = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+				String line;
+				while ((line = f.readLine()) != null) {
+					out.append(line);
+					out.append("\n");
+				}
+				f.close();
+				is.close();
+				return true;
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
 
 	@Override
 	public String getHoverInfo(ITextViewer textViewer, IRegion hoverRegion) {
@@ -55,16 +91,24 @@ public class SymHoverProvider implements ITextHover, ITextHoverExtension {
 					String keyWord = AST2Expr.PREDEFINED_SYMBOLS_MAP.get(searchStr);
 					if (keyWord != null) {
 						searchStr = keyWord;
+						StringBuilder buf = new StringBuilder();
+//						TODO: replace with Documentation#getMarkdown()
+						getMarkdown(buf, searchStr);
+//						return buf.toString();
+						// TODO <- display as HTML
+						return generateHTMLString(buf.toString());
 					}
+					return null;
 				}
 				StringBuilder buf = new StringBuilder();
-				Documentation.printDocumentation(buf, searchStr);
+//				TODO: replace with Documentation#getMarkdown()
+				getMarkdown(buf, searchStr);
 //				return buf.toString();
 				// TODO <- display as HTML
 				return generateHTMLString(buf.toString());
 			}
 		}
-		return "";
+		return null;
 	}
 
 	@Override
