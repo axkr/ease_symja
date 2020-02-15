@@ -8,14 +8,20 @@ import org.commonmark.ext.gfm.tables.TablesExtension;
 import org.commonmark.node.Node;
 import org.commonmark.parser.Parser;
 import org.commonmark.renderer.html.HtmlRenderer;
+import org.eclipse.jface.text.DefaultInformationControl;
+import org.eclipse.jface.text.IInformationControl;
+import org.eclipse.jface.text.IInformationControlCreator;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.ITextHover;
+import org.eclipse.jface.text.ITextHoverExtension;
 import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.jface.text.Region;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.editors.text.EditorsUI;
 import org.matheclipse.core.convert.AST2Expr;
 import org.matheclipse.core.form.Documentation;
 
-public class SymHoverProvider implements ITextHover {
+public class SymHoverProvider implements ITextHover, ITextHoverExtension {
 
 	@Override
 	public String getHoverInfo(ITextViewer textViewer, IRegion hoverRegion) {
@@ -53,9 +59,9 @@ public class SymHoverProvider implements ITextHover {
 				}
 				StringBuilder buf = new StringBuilder();
 				Documentation.printDocumentation(buf, searchStr);
-				return buf.toString();
+//				return buf.toString();
 				// TODO <- display as HTML
-//				return generateHTMLString(buf.toString());
+				return generateHTMLString(buf.toString());
 			}
 		}
 		return "";
@@ -96,10 +102,29 @@ public class SymHoverProvider implements ITextHover {
 	}
 
 	public static String generateHTMLString(final String markdownStr) {
-		Set<Extension> EXTENSIONS = Collections.singleton(TablesExtension.create());
-		Parser parser = Parser.builder().extensions(EXTENSIONS).build();
+		Set<Extension> markdownExtensions = Collections.singleton(TablesExtension.create());
+		Parser parser = Parser.builder().extensions(markdownExtensions).build();
 		Node document = parser.parse(markdownStr);
-		HtmlRenderer renderer = HtmlRenderer.builder().extensions(EXTENSIONS).build();
-		return renderer.render(document);
+		HtmlRenderer renderer = HtmlRenderer.builder().extensions(markdownExtensions).build();
+		String html = renderer.render(document);
+//		System.out.println(html);
+		// TODO improve this hack
+		html = html.replace("<blockquote>", "<pre>");
+		html = html.replace("</blockquote>", "</pre>");
+		return html;
+	}
+
+	/**
+	 * See: <a href="https://stackoverflow.com/a/42977366/24819">StackOverflow -
+	 * HTML tags in Eclipse editor hover</a>
+	 */
+	@Override
+	public IInformationControlCreator getHoverControlCreator() {
+		return new IInformationControlCreator() {
+			@Override
+			public IInformationControl createInformationControl(Shell parent) {
+				return new DefaultInformationControl(parent, EditorsUI.getTooltipAffordanceString());
+			}
+		};
 	}
 }
