@@ -17,8 +17,8 @@
             name="Symja Editor"
             icon="icons/obj16/java.png"
             extensions="sym"
-            contributorClass="org.eclipse.ease.lang.symja.symjaeditor.JavaActionContributor"
-            class="org.eclipse.ease.lang.symja.symjaeditor.JavaEditor"
+            contributorClass="org.eclipse.ease.lang.symja.symjaeditor.SymjaActionContributor"
+            class="org.eclipse.ease.lang.symja.symjaeditor.SymjaEditor"
             id="org.eclipse.ui.JavaEditor">
       </editor>
    </extension> 

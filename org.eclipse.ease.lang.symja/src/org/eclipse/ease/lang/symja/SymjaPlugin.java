@@ -15,9 +15,9 @@ package org.eclipse.ease.lang.symja;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.ease.lang.symja.symjaeditor.JavaPartitionScanner;
-import org.eclipse.ease.lang.symja.symjaeditor.java.JavaCodeScanner;
-import org.eclipse.ease.lang.symja.symjaeditor.javadoc.SymjaDocScanner;
+import org.eclipse.ease.lang.symja.symjaeditor.SymjaPartitionScanner;
+import org.eclipse.ease.lang.symja.symjaeditor.symja.SymjaCodeScanner;
+import org.eclipse.ease.lang.symja.symjaeditor.symjadoc.SymjaDocScanner;
 import org.eclipse.ease.lang.symja.symjaeditor.util.SymjaColorProvider;
 import org.eclipse.jface.text.rules.RuleBasedScanner;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
@@ -36,11 +36,11 @@ public class SymjaPlugin extends AbstractUIPlugin {
 
 	private static SymjaPlugin fgInstance;
 
-	private JavaPartitionScanner fPartitionScanner;
+	private SymjaPartitionScanner fPartitionScanner;
 
 	private SymjaColorProvider fColorProvider;
 
-	private JavaCodeScanner fCodeScanner;
+	private SymjaCodeScanner fCodeScanner;
 
 	private SymjaDocScanner fDocScanner;
 
@@ -65,9 +65,9 @@ public class SymjaPlugin extends AbstractUIPlugin {
 	 *
 	 * @return a scanner for creating Java partitions
 	 */
-	public JavaPartitionScanner getJavaPartitionScanner() {
+	public SymjaPartitionScanner getJavaPartitionScanner() {
 		if (fPartitionScanner == null)
-			fPartitionScanner= new JavaPartitionScanner();
+			fPartitionScanner= new SymjaPartitionScanner();
 		return fPartitionScanner;
 	}
 
@@ -78,7 +78,7 @@ public class SymjaPlugin extends AbstractUIPlugin {
 	 */
 	public RuleBasedScanner getJavaCodeScanner() {
 		if (fCodeScanner == null)
-			fCodeScanner= new JavaCodeScanner(getJavaColorProvider());
+			fCodeScanner= new SymjaCodeScanner(getJavaColorProvider());
 		return fCodeScanner;
 	}
 

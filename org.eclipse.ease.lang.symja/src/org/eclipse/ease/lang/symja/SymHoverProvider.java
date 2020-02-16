@@ -151,10 +151,13 @@ public class SymHoverProvider implements ITextHover, ITextHoverExtension {
 		Node document = parser.parse(markdownStr);
 		HtmlRenderer renderer = HtmlRenderer.builder().extensions(markdownExtensions).build();
 		String html = renderer.render(document);
-//		System.out.println(html);
+		
 		// TODO improve this hack
-		html = html.replace("<blockquote>", "<pre>");
-		html = html.replace("</blockquote>", "</pre>");
+		html = html.replace("<blockquote>", "");
+		html = html.replace("</blockquote>", "");
+		html = html.replace("<code>", "");
+		html = html.replace("</code>", "");
+//		System.out.println(html);
 		return html;
 	}
 

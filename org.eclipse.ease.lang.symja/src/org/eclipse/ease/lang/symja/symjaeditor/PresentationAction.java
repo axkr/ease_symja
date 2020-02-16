@@ -28,7 +28,7 @@ public class PresentationAction extends TextEditorAction {
 	 * Constructs and updates the action.
 	 */
 	public PresentationAction() {
-		super(JavaEditorMessages.getResourceBundle(), "TogglePresentation.", null); //$NON-NLS-1$
+		super(SymjaEditorMessages.getResourceBundle(), "TogglePresentation.", null); //$NON-NLS-1$
 		update();
 	}
 

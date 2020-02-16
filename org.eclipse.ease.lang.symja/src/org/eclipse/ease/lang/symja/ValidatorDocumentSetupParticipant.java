@@ -8,7 +8,7 @@ import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.ease.lang.symja.symjaeditor.JavaPartitionScanner;
+import org.eclipse.ease.lang.symja.symjaeditor.SymjaPartitionScanner;
 import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IDocumentExtension3;
@@ -82,7 +82,7 @@ public class ValidatorDocumentSetupParticipant
 		}
 		if (document instanceof IDocumentExtension3) {
 			IDocumentExtension3 extension3= (IDocumentExtension3) document;
-			IDocumentPartitioner partitioner= new FastPartitioner(SymjaPlugin.getDefault().getJavaPartitionScanner(), JavaPartitionScanner.JAVA_PARTITION_TYPES);
+			IDocumentPartitioner partitioner= new FastPartitioner(SymjaPlugin.getDefault().getJavaPartitionScanner(), SymjaPartitionScanner.JAVA_PARTITION_TYPES);
 			extension3.setDocumentPartitioner(SymjaPlugin.JAVA_PARTITIONING, partitioner);
 			partitioner.connect(document);
 		}
