@@ -11,55 +11,32 @@
             file-extensions="sym">
       </content-type>
    </extension>
-   <extension
+      <extension
          point="org.eclipse.ui.editors">
-      <editorContentTypeBinding
-            contentTypeId="org.eclipse.ease.lang.symja.sym"
-            editorId="org.eclipse.ui.genericeditor.GenericEditor">
-      </editorContentTypeBinding>
+      <editor
+            name="Symja Editor"
+            icon="icons/obj16/java.png"
+            extensions="sym"
+            contributorClass="org.eclipse.ease.lang.symja.symjaeditor.JavaActionContributor"
+            class="org.eclipse.ease.lang.symja.symjaeditor.JavaEditor"
+            id="org.eclipse.ui.JavaEditor">
+      </editor>
    </extension> 
-   <extension
-         point="org.eclipse.ui.genericeditor.presentationReconcilers">
-      <presentationReconciler
-            class="org.eclipse.ease.lang.symja.SymPresentationReconciler"
-            contentType="org.eclipse.ease.lang.symja.sym">
-      </presentationReconciler>
-   </extension>
-   <extension
-         point="org.eclipse.ui.genericeditor.hoverProviders">
-      <hoverProvider
-            class="org.eclipse.ease.lang.symja.SymHoverProvider"
-            contentType="org.eclipse.ease.lang.symja.sym">
-      </hoverProvider>
-   </extension>
-   <extension
-         point="org.eclipse.ui.genericeditor.contentAssistProcessors">
-      <contentAssistProcessor
-            class="org.eclipse.ease.lang.symja.SymContentAssistProcessor"
-            contentType="org.eclipse.ease.lang.symja.sym">
-      </contentAssistProcessor>
-   </extension>
-   <extension
-         point="org.eclipse.ui.genericeditor.autoEditStrategies">
-      <autoEditStrategy
-            class="org.eclipse.ease.lang.symja.SymAutoEditStrategy"
-            contentType="org.eclipse.ease.lang.symja.sym">
-      </autoEditStrategy>
-   </extension>
+      <extension
+         point="org.eclipse.core.filebuffers.documentSetup">
+      <participant
+            class="org.eclipse.ease.lang.symja.ValidatorDocumentSetupParticipant"
+            contentTypeId="org.eclipse.ease.lang.symja.sym"
+            extensions="sym">
+      </participant> 
+   </extension> 
+    
    <extension
          point="org.eclipse.ui.genericeditor.reconcilers">
       <reconciler
             class="org.eclipse.ease.lang.symja.SymReconciler"
             contentType="org.eclipse.ease.lang.symja.sym">
       </reconciler>
-   </extension>
-   <extension
-         point="org.eclipse.core.filebuffers.documentSetup">
-      <participant
-            class="org.eclipse.ease.lang.symja.ValidatorDocumentSetupParticipant"
-            contentTypeId="org.eclipse.ease.lang.symja.sym"
-            extensions="sym">
-      </participant>
    </extension>
    <extension
          point="org.eclipse.ease.language">
