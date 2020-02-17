@@ -146,6 +146,9 @@ public class SymjaReplScriptEngine extends AbstractReplScriptEngine {
 					stdout.println("Enabling timeout for evaluation to 60 seconds.");
 					fSeconds = 60;
 					return "";
+				} else if (command.equals("help")) { 
+					printUsage();
+					return "";
 				}
 			}
 			String postfix = Scanner.balanceCode(trimmedInput);
@@ -320,6 +323,7 @@ public class SymjaReplScriptEngine extends AbstractReplScriptEngine {
 		final String lineSeparator = System.getProperty("line.separator");
 		final StringBuilder msg = new StringBuilder();
 		msg.append(Config.SYMJA);
+		msg.append("Get more information: /help<RETURN>" + lineSeparator);
 		msg.append("To disable the evaluation timeout type: /timeoutoff<RETURN>" + lineSeparator);
 		msg.append("To enable the evaluation timeout type: /timeouton<RETURN>" + lineSeparator);
 		msg.append("To enable the output in Java form: /java<RETURN>" + lineSeparator);
