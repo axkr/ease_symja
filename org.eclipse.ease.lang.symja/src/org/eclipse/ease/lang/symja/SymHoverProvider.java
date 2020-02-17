@@ -84,7 +84,7 @@ public class SymHoverProvider implements ITextHover, ITextHoverExtension {
 				}
 			}
 			if (startIndex < endIndex && startIndex >= 0) {
-				SymjaEnvironementBootStrapper.initialize();
+				SymjaPlugin.initialize();
 				searchStr = text.substring(startIndex, endIndex);
 				if (searchStr.length() > 1) {
 					searchStr = searchStr.toLowerCase();
@@ -134,7 +134,7 @@ public class SymHoverProvider implements ITextHover, ITextHoverExtension {
 				}
 			}
 			if (startIndex < endIndex && startIndex >= 0) {
-				SymjaEnvironementBootStrapper.initialize();
+				SymjaPlugin.initialize();
 				searchStr = text.substring(startIndex, endIndex).toLowerCase();
 				String keyWord = AST2Expr.PREDEFINED_SYMBOLS_MAP.get(searchStr);
 				if (keyWord != null) {

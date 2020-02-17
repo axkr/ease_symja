@@ -1,7 +1,10 @@
 package org.eclipse.ease.lang.symja;
 
 import java.awt.Desktop;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.StringWriter;
 import java.net.URL;
@@ -11,12 +14,14 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.ease.AbstractReplScriptEngine;
 import org.eclipse.ease.Script;
 import org.eclipse.ease.ScriptEngineException;
 import org.eclipse.ease.debugging.model.EaseDebugVariable;
 import org.matheclipse.core.basic.Config;
 import org.matheclipse.core.eval.EvalControlledCallable;
+import org.matheclipse.core.eval.EvalEngine;
 import org.matheclipse.core.eval.ExprEvaluator;
 import org.matheclipse.core.eval.exception.AbortException;
 import org.matheclipse.core.eval.exception.FailedException;
@@ -85,8 +90,31 @@ public class SymjaReplScriptEngine extends AbstractReplScriptEngine {
 	@Override
 	protected Object execute(Script script, Object reference, String fileName, boolean uiThread) throws Throwable {
 
-		String inputExpression = script.getCode();
-		if (inputExpression != null) {
+		String inputExpression = null;
+		if ((fileName != null) && (!fileName.isEmpty())) {
+			final Object file = script.getFile();
+			File f = null;
+			if (file instanceof IFile) {
+				f = ((IFile) file).getLocation().toFile();
+			} else if (file instanceof File) {
+				f = ((File) file);
+
+			}
+			if (f != null) {
+				final String absolutePath = f.getAbsolutePath();
+//				inputExpression = "Get(\"" + absolutePath + "\")";
+				IExpr result = fEvaluator.eval(F.Get(F.stringx(absolutePath)));
+				if (result != null) {
+					stdout.println(printOutputForm(result));
+					return printResult(result);
+				}
+				return "";
+			}
+		} else {
+			inputExpression = script.getCode();
+		}
+
+		if (inputExpression != null && !inputExpression.startsWith("// use help")) {
 			String trimmedInput = inputExpression.trim();
 			if (trimmedInput.length() >= 4 && trimmedInput.charAt(0) == '/') {
 				String command = trimmedInput.substring(1).toLowerCase(Locale.ENGLISH);
@@ -130,11 +158,13 @@ public class SymjaReplScriptEngine extends AbstractReplScriptEngine {
 			// if (console.fPrettyPrinter) {
 			// console.prettyPrinter(inputExpression);
 			// } else {
-			resultPrinter(trimmedInput);
+			String result = resultPrinter(trimmedInput);
 			// }
 			counter++;
+			return result;
 		}
-		return fEvaluator.eval(inputExpression);
+		return "";// fEvaluator.eval(inputExpression);
+
 	}
 
 	private String resultPrinter(String inputExpression) {
@@ -259,24 +289,28 @@ public class SymjaReplScriptEngine extends AbstractReplScriptEngine {
 				return "ERROR-IN-INPUTFORM";
 			}
 		default:
-			if (Desktop.isDesktopSupported()) {
-				IExpr outExpr = result;
-				if (result.isAST(F.Graphics)) {// || result.isAST(F.Graphics3D)) {
-					outExpr = F.Show(outExpr);
-				}
-				String html = F.show(outExpr);
-				if (html != null) {
-					return html;
-				}
-			}
-			StringBuilder strBuffer = new StringBuilder();
-			fOutputFactory.reset();
-			if (fOutputFactory.convert(strBuffer, result)) {
-				return strBuffer.toString();
-			}
-			return "ERROR-IN-OUTPUTFORM";
+			return printOutputForm(result);
 		}
 
+	}
+
+	private String printOutputForm(IExpr result) {
+		if (Desktop.isDesktopSupported()) {
+			IExpr outExpr = result;
+			if (result.isAST(F.Graphics)) {// || result.isAST(F.Graphics3D)) {
+				outExpr = F.Show(outExpr);
+			}
+			String html = F.show(outExpr);
+			if (html != null) {
+				return html;
+			}
+		}
+		StringBuilder strBuffer = new StringBuilder();
+		fOutputFactory.reset();
+		if (fOutputFactory.convert(strBuffer, result)) {
+			return strBuffer.toString();
+		}
+		return "ERROR-IN-OUTPUTFORM";
 	}
 
 	/**
@@ -323,16 +357,19 @@ public class SymjaReplScriptEngine extends AbstractReplScriptEngine {
 
 	@Override
 	protected void setupEngine() throws ScriptEngineException {
-		SymjaEnvironementBootStrapper.initialize();
+		SymjaPlugin.initialize();
 		stdout = getOutputStream();
 		stderr = getErrorStream();
 		fEvaluator = new ExprEvaluator(false, 100);
 		fOutputFactory = OutputFormFactory.get(true, false, 5, 7);
-		fEvaluator.getEvalEngine().setFileSystemEnabled(true);
+		EvalEngine evalEngine = fEvaluator.getEvalEngine();
+		evalEngine.setFileSystemEnabled(true);
+		evalEngine.setOutPrintStream(stdout);
+		evalEngine.setErrorPrintStream(stderr);
 		fOutputTraditionalFactory = OutputFormFactory.get(true, false, 5, 7);
 		fInputFactory = OutputFormFactory.get(true, false, 5, 7);
 		fInputFactory.setQuotes(true);
-		printUsage();
+//		printUsage();
 	}
 
 }

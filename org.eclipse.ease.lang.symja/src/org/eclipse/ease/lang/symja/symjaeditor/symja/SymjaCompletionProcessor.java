@@ -16,7 +16,7 @@ package org.eclipse.ease.lang.symja.symjaeditor.symja;
 import java.text.MessageFormat;
 import java.util.List;
 
-import org.eclipse.ease.lang.symja.SymjaEnvironementBootStrapper;
+import org.eclipse.ease.lang.symja.SymjaPlugin;
 import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.jface.text.TextPresentation;
 import org.eclipse.jface.text.contentassist.CompletionProposal;
@@ -85,7 +85,7 @@ public class SymjaCompletionProcessor implements IContentAssistProcessor {
 			// System.out.println(searchStr);
 			List<String> list = IOFunctions.getAutoCompletionList(searchStr);
 			if (list.size() > 0) {
-				SymjaEnvironementBootStrapper.initialize();
+				SymjaPlugin.initialize();
 				ICompletionProposal[] proposals = new ICompletionProposal[list.size()];
 				for (int i = 0; i < list.size(); i++) {
 					String str = list.get(i);

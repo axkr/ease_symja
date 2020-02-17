@@ -12,7 +12,7 @@
 	<classpathentry exported="true" kind="lib" path="lib/tablesaw-jsplot-0.37.3.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/unbescape-1.1.6.RELEASE.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/univocity-parsers-2.8.4.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/matheclipse-core-1.0.0-SNAPSHOT.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/matheclipse-core-1.0.0-SNAPSHOT.jar" sourcepath="C:/Users/khart/git/symja_android_library/symja_android_library"/>
 	<classpathentry exported="true" kind="lib" path="lib/antlr4-runtime-4.7.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/apfloat-1.9.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/commonmark-0.14.0.jar"/>

@@ -5,12 +5,29 @@
    <extension
          point="org.eclipse.core.contenttype.contentTypes">
       <content-type
-            id="org.eclipse.ease.lang.symja.sym"
+      base-type="org.eclipse.core.runtime.text"
+            id="org.eclipse.ease.lang.symja.content-type"
+            default-charset="UTF-8"
+            file-extensions="sym"
             name="org.eclipse.ease.lang.symja.sym"
-            base-type="org.eclipse.core.runtime.text"
-            file-extensions="sym">
+            priority="low">
       </content-type>
    </extension>
+ 
+      <extension
+         point="org.eclipse.ease.scriptType">
+      <scriptType
+            codeFactory="org.eclipse.ease.lang.symja.SymjaCodeFactory"
+            codeParser="org.eclipse.ease.lang.symja.SymjaCodeParser"
+            defaultExtension="sym" 
+            headerParser="org.eclipse.ease.lang.symja.SymjaHeaderParser"
+            name="Symja">
+         <binding
+               contentType="org.eclipse.ease.lang.symja.content-type">
+         </binding>
+      </scriptType>
+   </extension>
+ 
       <extension
          point="org.eclipse.ui.editors">
       <editor
@@ -26,29 +43,25 @@
          point="org.eclipse.core.filebuffers.documentSetup">
       <participant
             class="org.eclipse.ease.lang.symja.ValidatorDocumentSetupParticipant"
-            contentTypeId="org.eclipse.ease.lang.symja.sym"
+            contentTypeId="org.eclipse.ease.lang.symja.content-type"
             extensions="sym">
       </participant> 
-   </extension> 
-    
-   <extension
-         point="org.eclipse.ui.genericeditor.reconcilers">
-      <reconciler
-            class="org.eclipse.ease.lang.symja.SymReconciler"
-            contentType="org.eclipse.ease.lang.symja.sym">
-      </reconciler>
-   </extension>
+   </extension>  
+   
    <extension
          point="org.eclipse.ease.language">
       <engine
-            class="org.eclipse.ease.lang.symja.SymjaReplScriptEngine"
+            class="org.eclipse.ease.lang.symja.SymjaReplScriptEngine" 
             id="org.eclipse.ease.lang.symja.engine"
             name="Symja"
-            priority="10">
-      </engine>
+            priority="10"> 
+            <binding
+               scriptType="Symja">
+         </binding>
+      </engine> 
       <launchExtension
-            class="org.eclipse.ease.lang.symja.SymjaEnvironementBootStrapper"
+            class="org.eclipse.ease.modules.BootStrapper"
             engineID="org.eclipse.ease.engine.symja">
-      </launchExtension>
+      </launchExtension> 
    </extension>
 </plugin>

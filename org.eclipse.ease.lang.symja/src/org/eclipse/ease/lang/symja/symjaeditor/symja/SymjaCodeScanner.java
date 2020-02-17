@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.ease.lang.symja.SymjaEnvironementBootStrapper;
+import org.eclipse.ease.lang.symja.SymjaPlugin;
 import org.eclipse.ease.lang.symja.symjaeditor.util.SymjaColorProvider;
 import org.eclipse.ease.lang.symja.symjaeditor.util.SymjaWhitespaceDetector;
 import org.eclipse.ease.lang.symja.symjaeditor.util.SymjaWordDetector;
@@ -26,7 +26,6 @@ import org.eclipse.jface.text.rules.IRule;
 import org.eclipse.jface.text.rules.IToken;
 import org.eclipse.jface.text.rules.MultiLineRule;
 import org.eclipse.jface.text.rules.RuleBasedScanner;
-import org.eclipse.jface.text.rules.SingleLineRule;
 import org.eclipse.jface.text.rules.Token;
 import org.eclipse.jface.text.rules.WhitespaceRule;
 import org.eclipse.jface.text.rules.WordRule;
@@ -83,7 +82,7 @@ public class SymjaCodeScanner extends RuleBasedScanner {
 //			wordRule.addWord(fgConstant, type);
 //		}
 
-		SymjaEnvironementBootStrapper.initialize();
+		SymjaPlugin.initialize();
 		for (Map.Entry<String, String> elem : AST2Expr.PREDEFINED_SYMBOLS_MAP.entrySet()) {
 			String key = elem.getKey();
 			if (key.length() > 1) {

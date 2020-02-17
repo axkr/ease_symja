@@ -21,6 +21,8 @@ import org.eclipse.ease.lang.symja.symjaeditor.symjadoc.SymjaDocScanner;
 import org.eclipse.ease.lang.symja.symjaeditor.util.SymjaColorProvider;
 import org.eclipse.jface.text.rules.RuleBasedScanner;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.matheclipse.core.basic.Config;
+import org.matheclipse.core.expression.F;
 
 
 /**
@@ -49,6 +51,7 @@ public class SymjaPlugin extends AbstractUIPlugin {
 	 */
 	public SymjaPlugin() {
 		fgInstance= this;
+		initialize();
 	}
 
 	/**
@@ -102,6 +105,13 @@ public class SymjaPlugin extends AbstractUIPlugin {
 		if (fDocScanner == null)
 			fDocScanner= new SymjaDocScanner(fColorProvider);
 		return fDocScanner;
+	}
+
+	public static void initialize() {
+		Config.PARSER_USE_LOWERCASE_SYMBOLS = true;
+		Config.USE_VISJS = true;
+		Config.FILESYSTEM_ENABLED = true;
+		F.initSymbols(null, null, true);
 	}
 
 	public static void log(IStatus status) {

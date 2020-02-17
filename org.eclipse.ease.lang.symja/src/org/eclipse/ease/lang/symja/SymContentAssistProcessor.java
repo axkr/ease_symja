@@ -32,7 +32,7 @@ public class SymContentAssistProcessor implements IContentAssistProcessor {
 				// System.out.println(searchStr);
 				List<String> list = IOFunctions.getAutoCompletionList(searchStr);
 				if (list.size() > 0) {
-					SymjaEnvironementBootStrapper.initialize();
+					SymjaPlugin.initialize();
 					ICompletionProposal[] proposals = new ICompletionProposal[list.size()];
 					for (int i = 0; i < list.size(); i++) {
 						String str = list.get(i);
