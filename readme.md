@@ -1,7 +1,7 @@
 ## Symja Eclipse EASE plugin
  
  
- Symja integration for [Eclipse EASE - scripting environment for Eclipse](https://www.eclipse.org/ease/)
+[Symja computer algebra language](https://github.com/axkr/symja_android_library) integration with [Eclipse EASE - scripting environment](https://www.eclipse.org/ease/) for the [Eclipse platform](https://www.eclipse.org/)
  
  ### Use Symja as a script shell
  
