@@ -27,7 +27,6 @@
          </binding>
       </scriptType>
    </extension>
- 
       <extension
          point="org.eclipse.ui.editors">
       <editor
@@ -38,6 +37,7 @@
             class="org.eclipse.ease.lang.symja.symjaeditor.SymjaEditor"
             id="org.eclipse.ui.JavaEditor">
       </editor>
+      
    </extension> 
       <extension
          point="org.eclipse.core.filebuffers.documentSetup">

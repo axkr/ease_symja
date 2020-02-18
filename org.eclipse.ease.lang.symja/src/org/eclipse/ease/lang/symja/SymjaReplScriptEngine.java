@@ -3,13 +3,12 @@ package org.eclipse.ease.lang.symja;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.StringWriter;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -146,7 +145,7 @@ public class SymjaReplScriptEngine extends AbstractReplScriptEngine {
 					stdout.println("Enabling timeout for evaluation to 60 seconds.");
 					fSeconds = 60;
 					return "";
-				} else if (command.equals("help")) { 
+				} else if (command.equals("help")) {
 					printUsage();
 					return "";
 				}
@@ -337,26 +336,21 @@ public class SymjaReplScriptEngine extends AbstractReplScriptEngine {
 
 	@Override
 	protected Object internalGetVariable(String name) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	protected Map<String, Object> internalGetVariables() {
-		// TODO Auto-generated method stub
-		return null;
+		return new HashMap<String, Object>();
 	}
 
 	@Override
 	protected boolean internalHasVariable(String name) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	protected void internalSetVariable(String name, Object content) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
