@@ -1,15 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
-
+   
+    <extension-point id="fileFormatSupport" name="File format support" schema="schema/fileFormatSupport.exsd"/>
+   
+   	<extension point="org.matheclipse.ease.lang.symja.fileFormatSupport">
+		<fileFormatSupport
+			fileFormats="csv"
+			supportClass="org.matheclipse.ease.lang.symja.tablesaw.io.csv.CsvFileFormatSupport"
+		/>
+	</extension>
+   
    <extension
          point="org.eclipse.core.contenttype.contentTypes">
       <content-type
       base-type="org.eclipse.core.runtime.text"
-            id="org.eclipse.ease.lang.symja.content-type"
+            id="org.matheclipse.ease.lang.symja.content-type"
             default-charset="UTF-8"
             file-extensions="sym"
-            name="org.eclipse.ease.lang.symja.sym"
+            name="org.matheclipse.ease.lang.symja.sym"
             priority="low">
       </content-type>
    </extension>
@@ -17,13 +26,13 @@
       <extension
          point="org.eclipse.ease.scriptType">
       <scriptType
-            codeFactory="org.eclipse.ease.lang.symja.SymjaCodeFactory"
-            codeParser="org.eclipse.ease.lang.symja.SymjaCodeParser"
+            codeFactory="org.matheclipse.ease.lang.symja.SymjaCodeFactory"
+            codeParser="org.matheclipse.ease.lang.symja.SymjaCodeParser"
             defaultExtension="sym" 
-            headerParser="org.eclipse.ease.lang.symja.SymjaHeaderParser"
+            headerParser="org.matheclipse.ease.lang.symja.SymjaHeaderParser"
             name="Symja">
          <binding
-               contentType="org.eclipse.ease.lang.symja.content-type">
+               contentType="org.matheclipse.ease.lang.symja.content-type">
          </binding>
       </scriptType>
    </extension>
@@ -33,8 +42,8 @@
             name="Symja Editor"
             icon="icons/obj16/java.png"
             extensions="sym"
-            contributorClass="org.eclipse.ease.lang.symja.symjaeditor.SymjaActionContributor"
-            class="org.eclipse.ease.lang.symja.symjaeditor.SymjaEditor"
+            contributorClass="org.matheclipse.ease.lang.symja.symjaeditor.SymjaActionContributor"
+            class="org.matheclipse.ease.lang.symja.symjaeditor.SymjaEditor"
             id="org.eclipse.ui.JavaEditor">
       </editor>
       
@@ -42,8 +51,8 @@
       <extension
          point="org.eclipse.core.filebuffers.documentSetup">
       <participant
-            class="org.eclipse.ease.lang.symja.ValidatorDocumentSetupParticipant"
-            contentTypeId="org.eclipse.ease.lang.symja.content-type"
+            class="org.matheclipse.ease.lang.symja.ValidatorDocumentSetupParticipant"
+            contentTypeId="org.matheclipse.ease.lang.symja.content-type"
             extensions="sym">
       </participant> 
    </extension>  
@@ -51,8 +60,8 @@
    <extension
          point="org.eclipse.ease.language">
       <engine
-            class="org.eclipse.ease.lang.symja.SymjaReplScriptEngine" 
-            id="org.eclipse.ease.lang.symja.engine"
+            class="org.matheclipse.ease.lang.symja.SymjaReplScriptEngine" 
+            id="org.matheclipse.ease.lang.symja.engine"
             name="Symja"
             priority="10"> 
             <binding
@@ -61,7 +70,125 @@
       </engine> 
       <launchExtension
             class="org.eclipse.ease.modules.BootStrapper"
-            engineID="org.eclipse.ease.engine.symja">
+            engineID="org.matheclipse.ease.engine.symja">
       </launchExtension> 
    </extension>
+   
+   
+   
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            class="org.matheclipse.ease.lang.symja.tablesaw.NatTablesawEditor"
+            contributorClass="org.matheclipse.ease.lang.symja.tablesaw.TablesawEditorActionBarContributor"
+            default="true"
+            extensions="csv,xlsx"
+            id="org.matheclipse.ease.lang.symja.tablesaw.table"
+            name="Tablesaw editor"
+            icon="icons/obj16/java.gif"
+            >
+      </editor>
+   </extension>
+
+   <extension
+         point="org.eclipse.ui.views">
+      <category
+            id="org.matheclipse.ease.lang.symja.tablesaw.category"
+            name="Symja tablesaw"
+            >
+      </category>
+
+      <view
+            category="org.matheclipse.ease.lang.symja.tablesaw.category"
+            class="org.matheclipse.ease.lang.symja.tablesaw.views.TableProviderRegistryView"
+            id="org.matheclipse.ease.lang.symja.tablesaw.views.TableProviderRegistryView"
+            name="Table Registry"
+            icon="icons/obj16/java.gif"
+            >
+      </view>
+   </extension> 
+
+   <extension
+         point="org.eclipse.ui.views">
+       <view
+            category="org.matheclipse.ease.lang.symja.tablesaw.category"
+            class="org.matheclipse.ease.lang.symja.tablesaw.NatTablesawView"
+            id="org.matheclipse.ease.lang.symja.tablesaw.NatTablesawView"
+            allowMultiple="true"
+            name="Table"
+            icon="icons/obj16/java.gif"
+            >
+      </view>
+   </extension>
+         
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            category="org.matheclipse.ease.lang.symja.tablesaw.category"
+            class="org.matheclipse.ease.lang.symja.tablesaw.views.SummaryTableView"
+            id="org.matheclipse.ease.lang.symja.tablesaw.SummaryTableView"
+            allowMultiple="true"
+            name="Summary"
+            icon="icons/obj16/java.gif"
+            >
+      </view>
+      <view
+            category="org.matheclipse.ease.lang.symja.tablesaw.category"
+            class="org.matheclipse.ease.lang.symja.tablesaw.views.CrossTableView"
+            id="org.matheclipse.ease.lang.symja.tablesaw.CrossTableView"
+            allowMultiple="true"
+            name="Cross Table"
+            icon="icons/obj16/java.gif"
+            >
+      </view>
+   </extension>
+   
+   
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            category="org.matheclipse.ease.lang.symja.tablesaw.category"
+            class="org.matheclipse.ease.lang.symja.tablesaw.views.WebTableView"
+            id="org.matheclipse.ease.lang.symja.tablesaw.views.WebTableView"
+            allowMultiple="true"
+            name="Web Page"
+            icon="icons/obj16/java.gif"
+            >
+      </view>
+   </extension>
+   
+   
+    <extension
+          point="org.eclipse.ui.handlers">
+       <handler
+             class="org.matheclipse.ease.lang.symja.tablesaw.commands.EditDeleteCommandHandler"
+             commandId="org.eclipse.ui.edit.delete">
+         <activeWhen>
+            <with variable="activeEditorId">
+                <equals value="org.matheclipse.ease.lang.symja.tablesaw.table"/>
+             </with>
+         </activeWhen>
+         <!-- <enabledWhen></enabledWhen> -->
+       </handler>
+       <!--
+       -->
+       <handler
+             class="org.matheclipse.ease.lang.symja.tablesaw.commands.EditCopyCommandHandler"
+             commandId="org.eclipse.ui.edit.copy">
+         <activeWhen>
+            <with variable="activeEditorId">
+                <equals value="org.matheclipse.ease.lang.symja.tablesaw.table"/>
+             </with>
+         </activeWhen>
+       </handler>
+       <handler
+             class="org.matheclipse.ease.lang.symja.tablesaw.commands.EditPasteCommandHandler"
+             commandId="org.eclipse.ui.edit.paste">
+         <activeWhen>
+            <with variable="activeEditorId">
+                <equals value="org.matheclipse.ease.lang.symja.tablesaw.table"/>
+             </with>
+         </activeWhen>
+       </handler>
+    </extension>
 </plugin>

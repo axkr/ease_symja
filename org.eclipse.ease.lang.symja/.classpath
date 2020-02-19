@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
+	<classpathentry exported="true" kind="lib" path="lib/RoaringBitmap-0.8.12.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/poi-ooxml-schemas-4.1.1.jar"/>
 	<classpathentry kind="lib" path="lib/poi-ooxml-4.1.1.jar"/>
 	<classpathentry kind="lib" path="lib/tablesaw-excel-0.37.3.jar"/>
