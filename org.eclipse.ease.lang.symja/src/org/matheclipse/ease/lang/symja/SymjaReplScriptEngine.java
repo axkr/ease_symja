@@ -104,8 +104,9 @@ public class SymjaReplScriptEngine extends AbstractReplScriptEngine {
 //				inputExpression = "Get(\"" + absolutePath + "\")";
 				IExpr result = fEvaluator.eval(F.Get(F.stringx(absolutePath)));
 				if (result != null) {
-					stdout.println(printOutputForm(result));
-					return printResult(result);
+					String outString = printOutputForm(result);
+					stdout.println(outString);
+					return outString;
 				}
 				return "";
 			}
