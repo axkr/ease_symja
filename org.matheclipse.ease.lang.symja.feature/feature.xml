@@ -21,5 +21,11 @@
          download-size="0"
          install-size="0"
          version="0.0.0"/>
+         
+      <plugin
+         id="org.matheclipse.ease.lang.symja.help"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
 
 </feature>
