@@ -1,0 +1,64 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<title>Symbols and assignments</title>
+</head>
+
+<body>
+<h1>Symbols and assignments</h1>
+ 
+<p>Symbols need not be declared in Symja, they can just be entered and remain variable
+(Only the symbols which consists of exactly one character are case sensitive.
+For all other identifiers the input parser doesn't distinguish between lower and upper case characters):</p>
+<pre><code>&gt;&gt; x
+x
+</code></pre>
+<p>Basic simplifications are performed:</p>
+<pre><code>&gt;&gt; x + 2 * x
+3*x
+</code></pre>
+<p>Symbols can have any name that consists of characters and digits:</p>
+<pre><code>&gt;&gt; iAm1Symbol ^ 2
+iam1symbol^2
+</code></pre>
+<p>You can assign values to symbols:</p>
+<pre><code>&gt;&gt; a = 2
+2
+
+&gt;&gt; a ^ 3
+8
+
+&gt;&gt; a = 4
+4
+
+&gt;&gt; a ^ 3
+64
+</code></pre>
+<p>Assigning a value returns that value. If you want to suppress the output of any result, add a <code>;</code> to the end of your query:</p>
+<pre><code>&gt;&gt; a = 4;
+</code></pre>
+<p>Values can be copied from one variable to another:</p>
+<pre><code>&gt;&gt; b = a;
+</code></pre>
+<p>Now changing a does not affect b:</p>
+<pre><code>&gt;&gt; a = 3;
+
+&gt;&gt; b
+4
+</code></pre>
+<p>Such a dependency can be achieved by using “delayed assignment” with the <code>:=</code> operator
+(which does not return anything, as the right side is not even evaluated):</p>
+<pre><code>&gt;&gt; b := a ^ 2
+
+&gt;&gt; b
+9
+
+&gt;&gt; a = 5;
+
+&gt;&gt; b
+25
+</code></pre>
+</body>
+</html>

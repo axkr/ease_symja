@@ -1,0 +1,74 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<title>Control statements</title>
+</head>
+
+<body>
+<h1>Control statements</h1>
+ 
+<p>Like most programming languages, Symja has common control statements for conditions, loops, etc.:</p>
+<pre><code>If(cond, pos, neg)
+</code></pre>
+<blockquote>
+<p>returns <code>pos</code> if <code>cond</code> evaluates to <code>True</code>, and neg if it evaluates to <code>False</code>.</p>
+</blockquote>
+<pre><code>Which(cond1, expr1, cond2, expr2, ...)
+</code></pre>
+<blockquote>
+<p>yields <code>expr1</code> if <code>cond1</code> evaluates to <code>True</code>, <code>expr2</code> if <code>cond2</code> evaluates to <code>True</code>, etc.</p>
+</blockquote>
+<pre><code>Do(expr, {i, max})
+</code></pre>
+<blockquote>
+<p>evaluates <code>expr</code> <code>max</code> times, substituting <code>i</code> in <code>expr</code> with values from <code>1</code> to <code>max</code>.</p>
+</blockquote>
+<pre><code>For(start, test, incr, body)
+</code></pre>
+<blockquote>
+<p>evaluates <code>start</code>, and then iteratively <code>body</code> and <code>incr</code> as long as <code>test</code> evaluates to <code>True</code>.</p>
+</blockquote>
+<pre><code>While(test, body)
+</code></pre>
+<blockquote>
+<p>evaluates <code>body</code> as long as <code>test</code> evaluates to <code>True</code>.</p>
+</blockquote>
+<pre><code>Nest(f, expr, n)
+</code></pre>
+<blockquote>
+<p>returns an expression with <code>f</code> applied <code>n</code> times to <code>expr</code>.</p>
+</blockquote>
+<pre><code>NestWhile(f, expr, test)
+</code></pre>
+<blockquote>
+<p>applies a function <code>f</code> repeatedly on an expression <code>expr</code>, until applying <code>test</code> on the result no longer yields <code>True</code>.</p>
+</blockquote>
+<pre><code>FixedPoint(f, expr)
+</code></pre>
+<blockquote>
+<p>starting with <code>expr</code>, repeatedly applies <code>f</code> until the result no longer changes.</p>
+</blockquote>
+<pre><code>&gt;&gt; If(2 &lt; 3, a, b)
+a
+
+&gt;&gt; x = 3; Which(x &lt; 2, a, x &gt; 4, b, x &lt; 5, c)
+c
+</code></pre>
+<p>Compound statements can be entered with <code>;</code>.
+The result of a compound expression is its last part or <code>Null</code> if it ends with a <code>;</code>.</p>
+<pre><code>&gt;&gt; 1; 2; 3
+3
+
+&gt;&gt; 1; 2; 3;
+</code></pre>
+<p>Inside For, While, and Do loops, Break() exits the loop and Continue() continues to the next iteration.</p>
+<pre><code>&gt;&gt; For(i = 1, i &lt;= 5, i++, If(i == 4, Break()); Print(i))
+1
+2
+3
+</code></pre>
+
+</body>
+</html>

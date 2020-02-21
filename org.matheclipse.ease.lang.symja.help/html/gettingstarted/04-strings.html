@@ -1,0 +1,30 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<title>Strings</title>
+</head>
+
+<body>
+<h1>Strings</h1>
+
+<p>Strings can be entered with <code>"</code> as delimeters:</p>
+<pre><code>&gt;&gt; "Hello world!"
+Hello world!"
+</code></pre>
+<p>Strings can be joined using the <code>&lt;&gt;</code> operator:</p>
+<pre><code>&gt;&gt; "Hello" &lt;&gt; " " &lt;&gt; "world!"
+Hello world!
+</code></pre>
+<p>Numbers cannot be joined to strings:</p>
+<pre><code>&gt;&gt; "Debian" &lt;&gt; 6
+Debian&lt;&gt;6
+</code></pre>
+<p>They have to be converted to strings using <code>ToString</code> first:</p>
+<pre><code>&gt;&gt; "Debian" &lt;&gt; ToString(6)
+Debian6
+</code></pre>
+
+</body>
+</html>

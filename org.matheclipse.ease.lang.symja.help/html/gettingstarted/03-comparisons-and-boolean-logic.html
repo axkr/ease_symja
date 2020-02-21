@@ -1,0 +1,41 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<title>Comparisons and Boolean logic</title>
+</head>
+
+<body>
+<h1>Comparisons and Boolean logic</h1>
+
+<p>Values can be compared for equality using the <code>==</code> operator:</p>
+<pre><code>&gt;&gt; 3 == 3
+True 
+
+&gt;&gt; 3 == 4
+False
+</code></pre>
+<p>The special symbols <code>True</code> and <code>False</code> are used to denote truth values. Naturally, there are inequality comparisons as well:</p>
+<pre><code>&gt;&gt; 3 &gt; 4
+False
+</code></pre>
+<p>Truth values can be negated using <code>!</code> (logical not) and combined using <code>&amp;&amp;</code> (logical and) and <code>||</code> (logical or):</p>
+<pre><code>&gt;&gt; !True
+False
+
+&gt;&gt; !False
+True
+
+&gt;&gt; 3 &lt; 4 &amp;&amp; 6 &gt; 5
+True
+</code></pre>
+<p><code>&amp;&amp;</code> has higher precedence than <code>||</code>, i.e. it binds stronger:</p>
+<pre><code>&gt;&gt; True &amp;&amp; True || False &amp;&amp; False
+True
+
+&gt;&gt; True &amp;&amp; (True || False) &amp;&amp; False
+False
+</code></pre>
+</body>
+</html>

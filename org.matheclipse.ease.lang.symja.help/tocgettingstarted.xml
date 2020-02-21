@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?NLS TYPE="org.eclipse.help.toc"?>
+
+<toc label="Getting Started" link_to="toc.xml#gettingstarted"> 
+	<topic label="Getting started"  href="html/gettingstarted/01-getting-started.html" /> 
+	<topic label="Symbols and assignments" href="html/gettingstarted/02-symbols-and-assignments.html" /> 
+	<topic label="Comparisons and boolean logic" href="html/gettingstarted/03-comparisons-and-boolean-logic.html" /> 
+	<topic label="Strings" href="html/gettingstarted/04-strings.html" /> 
+	<topic label="Lists" href="html/gettingstarted/05-lists.html" /> 
+	<topic label="The structure of things" href="html/gettingstarted/06-the-structure-of-things.html" /> 
+	<topic label="Functions and patterns" href="html/gettingstarted/07-functions-and-patterns.html" /> 
+	<topic label="Control statements" href="html/gettingstarted/08-control-statements.html" /> 
+	<topic label="Scoping" href="html/gettingstarted/09-scoping.html" /> 
+	
+	<topic label="Expression types" href="html/gettingstarted/97-expression-types.html" /> 
+	
+	<topic label="Main Topic 2">
+		<topic label="Sub Topic 2" href="html/gettingstarted/subtopic2.html" />
+	</topic> 
+</toc>

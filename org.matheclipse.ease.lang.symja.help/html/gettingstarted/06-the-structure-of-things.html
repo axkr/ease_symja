@@ -1,0 +1,100 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<title>The structure of things</title>
+</head>
+
+<body>
+<h1>The structure of things</h1>
+ 
+<p>Every expression in Symja is built upon the same principle: it consists of a head and an arbitrary number of children,
+unless it is an atom, i.e. it can not be subdivided any further.
+To put it another way: everything is a function call. This can be best seen when displaying expressions in their “full form”:</p>
+<pre><code>&gt;&gt; FullForm(a + b + c)
+Plus(a, b, c)
+</code></pre>
+<p>Nested calculations are nested function calls:</p>
+<pre><code>&gt;&gt; FullForm(a + b * (c + d))
+Plus(a, Times(b, Plus(c, d)))
+</code></pre>
+<p>Even lists are function calls of the function <code>List</code>:</p>
+<pre><code>&gt;&gt; FullForm({1, 2, 3})
+List(1, 2, 3)
+</code></pre>
+<p>The head of an expression can be determined with <code>Head</code>:</p>
+<pre><code>&gt;&gt; Head(a + b + c)
+Plus
+</code></pre>
+<p>The children of an expression can be accessed like list elements:</p>
+<pre><code>&gt;&gt; (a + b + c)[[2]]
+b
+</code></pre>
+<p>The head is the <code>0</code>th element:</p>
+<pre><code>&gt;&gt; (a + b + c)[[0]]
+Plus
+</code></pre>
+<p>The head of an expression can be exchanged using the function <code>Apply</code>:</p>
+<pre><code>&gt;&gt; Apply(g, f(x, y))
+g(x,y)
+
+&gt;&gt; Apply(Plus, a * b * c)
+a+b+c
+</code></pre>
+<p>Apply can be written using the operator <code>@@</code>:</p>
+<pre><code>&gt;&gt; Times @@ {1, 2, 3, 4}
+24
+</code></pre>
+<p>This exchanges the head List of <code>{1, 2, 3, 4}</code> with <code>Times</code>, and then the expression <code>Times(1, 2, 3, 4)</code> is evaluated, yielding <code>24</code>.</p>
+<p>Apply can also be applied on a certain level of an expression:</p>
+<pre><code>&gt;&gt; Apply(f, {{1, 2}, {3, 4}}, {1})
+{f(1,2),f(3,4)}
+</code></pre>
+<p>Or even on a range of levels:</p>
+<pre><code>&gt;&gt; Apply(f, {{1, 2}, {3, 4}}, {0, 2})
+f(f(1,2),f(3,4))
+</code></pre>
+<p>Apply is similar to Map (operator <code>/@</code>):</p>
+<pre><code>&gt;&gt; Map(f, {1, 2, 3, 4})
+{f(1),f(2),f(3),f(4)}
+
+&gt;&gt; f /@ {{1, 2}, {3, 4}}
+{f({1,2}),f({3,4})}
+</code></pre>
+<p>The atoms of Symja are numbers, symbols, and strings. AtomQ tests whether an expression is an atom:</p>
+<pre><code>&gt;&gt; AtomQ(5)
+True
+
+&gt;&gt; AtomQ(a + b)
+False
+</code></pre>
+<p>The full form of rational and complex numbers looks like they were compound expressions:</p>
+<pre><code>&gt;&gt; FullForm(3 / 5)
+Rational(3,5)
+
+&gt;&gt; FullForm(3 + 4 * I)
+Complex(3,4)
+</code></pre>
+<p>However, they are still atoms, thus unaffected by applying functions, for instance:</p>
+<pre><code>&gt;&gt; f @@ Complex(3, 4)
+3+I*4
+</code></pre>
+<p>Nevertheless, every atom has a head:</p>
+<pre><code>&gt;&gt; Head /@ {1, 1/2, 2.0, I, "a string", x}
+Integer,Rational,Real,Complex,String,Symbol}
+</code></pre>
+<p>The operator === tests whether two expressions are the same on a structural level:</p>
+<pre><code>&gt;&gt; 3 === 3
+True
+
+&gt;&gt; 3 == 3.0
+True
+</code></pre>
+<p>But</p>
+<pre><code>&gt;&gt; 3 === 3.0
+False
+</code></pre>
+<p>because 3 (an <code>Integer</code>) and 3.0 (a <code>Real</code>) are structurally different.</p>
+</body>
+</html>

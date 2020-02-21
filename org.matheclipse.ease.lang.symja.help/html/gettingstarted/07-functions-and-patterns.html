@@ -1,0 +1,155 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<title>Functions and patterns</title>
+</head>
+
+<body>
+<h1>Functions and patterns</h1>
+
+<p>Functions can be defined in the following way:</p>
+<pre><code>&gt;&gt; f(x_) := x ^ 2
+</code></pre>
+<p>This tells Symja to replace every occurrence of <code>f</code> with one (arbitrary) parameter <code>x</code> with <code>x ^ 2</code>.</p>
+<pre><code>&gt;&gt; f(3)
+9
+
+&gt;&gt; f(a)
+a^2
+</code></pre>
+<p>The definition of f does not specify anything for two parameters, so any such call will stay unevaluated:</p>
+<pre><code>&gt;&gt; f(1, 2)
+f(1,2)
+</code></pre>
+<p>In fact, functions in Symja are just one aspect of patterns:
+<code>f(x_)</code> is a pattern that matches expressions like <code>f(3)</code> and <code>f(a)</code>.
+The following patterns are available:</p>
+<pre><code>_
+</code></pre>
+<blockquote>
+<p>matches one expression.</p>
+</blockquote>
+<pre><code>x_  
+</code></pre>
+<blockquote>
+<p>matches one expression and stores it in <code>x</code>.</p>
+</blockquote>
+<pre><code>__ 
+</code></pre>
+<blockquote>
+<p>matches a sequence of one or more expressions.</p>
+</blockquote>
+<pre><code>___
+</code></pre>
+<blockquote>
+<p>matches a sequence of zero or more expressions.</p>
+</blockquote>
+<pre><code>_h
+</code></pre>
+<blockquote>
+<p>matches one expression with head <code>h</code>.</p>
+</blockquote>
+<pre><code>x_h 
+</code></pre>
+<blockquote>
+<p>matches one expression with head <code>h</code> and stores it in <code>x</code>.</p>
+</blockquote>
+<pre><code>p | q
+</code></pre>
+<p>or</p>
+<pre><code>Alternatives(p, q)
+</code></pre>
+<blockquote>
+<p>matches either pattern <code>p</code> or <code>q</code>.</p>
+</blockquote>
+<pre><code>p ? t
+</code></pre>
+<p>or</p>
+<pre><code>PatternTest(p, t)
+</code></pre>
+<blockquote>
+<p>matches <code>p</code> if the test <code>t(p)</code> yields <code>True</code>.</p>
+</blockquote>
+<pre><code>p /; c
+</code></pre>
+<p>or</p>
+<pre><code>Condition(p, c)
+</code></pre>
+<blockquote>
+<p>matches <code>p</code> if condition <code>c</code> holds.</p>
+</blockquote>
+<p>As before, patterns can be used to define functions:</p>
+<pre><code>&gt;&gt; g(s___) := Plus(s) ^ 2
+
+&gt;&gt; g(1, 2, 3)
+36
+</code></pre>
+<p><code>MatchQ(e, p)</code> tests whether <code>e</code> matches <code>p</code>:</p>
+<pre><code>&gt;&gt; MatchQ(a + b, x_ + y_)
+True
+
+&gt;&gt; MatchQ(6, _Integer)
+True
+</code></pre>
+<p><code>ReplaceAll</code> (operator <code>/.</code>) replaces all occurrences of a pattern in an expression using a <code>Rule</code> given by <code>-&gt;</code>:</p>
+<pre><code>&gt;&gt; {2, "a", 3, 2.5, "b", c} /. x_Integer -&gt; x ^ 2
+{4,"a",9,2.5,"b",c}
+</code></pre>
+<p>You can also specify a list of rules:</p>
+<pre><code>&gt;&gt; {2, "a", 3, 2.5, "b", c} /. {x_Integer -&gt; x ^ 2.0, y_String -&gt; 10}
+{4.0,10,9.0,2.5,10,c}
+</code></pre>
+<p><code>ReplaceRepeated</code> (operator <code>//.</code>) applies a set of rules repeatedly, until the expression doesn't change anymore:</p>
+<pre><code>&gt;&gt; {2, "a", 3, 2.5, "b", c} //. {x_Integer -&gt; x ^ 2.0, y_String -&gt; 10}
+{4.0,100.0,9.0,2.5,100.0,c}
+</code></pre>
+<p>There is a “delayed” version of <code>Rule</code> which can be specified by <code>:&gt;</code> (similar to the relation of <code>:=</code> to <code>=</code>):</p>
+<pre><code>&gt;&gt; a :&gt; 1 + 2
+a:&gt;1+2
+
+&gt;&gt; a -&gt; 1 + 2
+a-&gt;3
+</code></pre>
+<p>This is useful when the right side of a rule should not be evaluated immediately (before matching):</p>
+<pre><code>&gt;&gt; {1, 2} /. x_Integer -&gt; N(x)
+{1,2}
+</code></pre>
+<p>Here, <code>N</code> is applied to x before the actual matching, simply yielding x. With a delayed rule this can be avoided:</p>
+<pre><code>&gt;&gt; {1, 2} /. x_Integer :&gt; N(x)
+{1.0,2.0}
+</code></pre>
+<p>In addition to defining functions as rules for certain patterns, there are pure functions that can be defined using the <code>&amp;</code> postfix operator, where everything before it is treated as the function body and <code>#</code> can be used as argument placeholder:</p>
+<pre><code>&gt;&gt; h = # ^ 2 &amp;;
+
+&gt;&gt; h(3)
+9
+</code></pre>
+<p>Multiple arguments can simply be indexed:</p>
+<pre><code>&gt;&gt; s = #1 + #2 &amp;;
+
+&gt;&gt; s(4, 6)
+10
+</code></pre>
+<p>It is also possible to name arguments using <code>Function</code>:</p>
+<pre><code>&gt;&gt; p = Function({x, y}, x * y);
+
+&gt;&gt; p(4, 6)
+24
+</code></pre>
+<p>Pure functions are very handy when functions are used only locally, e.g., when combined with operators like <code>Map</code>:</p>
+<pre><code>&gt;&gt; # ^ 2 &amp; /@ Range(5)
+{1,4,9,16,25}
+</code></pre>
+<p>Sort according to the second part of a list:</p>
+<pre><code>&gt;&gt; Sort({{x, 10}, {y, 2}, {z, 5}}, #1[[2]] &lt; #2[[2]] &amp;)
+{{y,2},{z,5},{x,10}}
+</code></pre>
+<p>Functions can be applied using postfix notation, in addition to using <code>()</code>:</p>
+<pre><code>&gt;&gt; 3 // h
+9
+</code></pre>
+
+</body>
+</html>

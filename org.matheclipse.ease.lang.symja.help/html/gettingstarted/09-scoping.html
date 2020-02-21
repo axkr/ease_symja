@@ -1,0 +1,69 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<title>Scoping</title>
+</head>
+
+<body>
+<h1>Scoping</h1>
+
+<p>By default, all symbols are “global” in Symja, i.e. they can be read and written in any part of your program.
+However, sometimes “local” variables are needed in order not to disturb the global namespace.
+Symja provides two ways to support this:</p>
+<ul>
+<li>lexical scoping by <code>Module</code>, and</li>
+<li>dynamic scoping by <code>Block</code>.</li>
+</ul>
+<pre><code>Module({vars}, expr)
+</code></pre>
+<blockquote>
+<p>localizes variables by giving them a temporary name of the form <code>name$number</code>, where number is the current internal Symja value of "module number". Each time a module is evaluated, "module number" is incremented.</p>
+</blockquote>
+<pre><code>Block({vars}, expr)
+</code></pre>
+<blockquote>
+<p>temporarily stores the definitions of certain variables, evaluates <code>expr</code> with reset values and restores the original definitions afterwards.</p>
+</blockquote>
+<p>Both scoping constructs shield inner variables from affecting outer ones:</p>
+<pre><code>&gt;&gt; t = 3
+3
+
+&gt;&gt; Module({t}, t = 2)
+2
+
+&gt;&gt; Block({t}, t = 2)
+2
+
+&gt;&gt; t
+3
+</code></pre>
+<p><code>Module</code> creates new variables:</p>
+<pre><code>&gt;&gt; y = x ^ 3;
+&gt;&gt; Module({x = 2}, x * y)
+2*x^3
+</code></pre>
+<p><code>Block</code> does not:</p>
+<pre><code>&gt;&gt; Block({x = 2}, x * y)
+16
+</code></pre>
+<p>Thus, <code>Block</code> can be used to temporarily assign a value to a variable:</p>
+<pre><code>&gt;&gt; expr = x ^ 2 + x;
+&gt;&gt; Block({x = 3}, expr)
+12
+
+&gt;&gt; x
+x
+</code></pre>
+<p>It is common to use scoping constructs for function definitions with local variables:</p>
+<pre><code>&gt;&gt; fac(n_) := Module({k, p}, p = 1; For(k = 1, k &lt;= n, ++k, p *= k); p)
+&gt;&gt; fac(10)
+3628800
+
+&gt;&gt; 10!
+3628800
+</code></pre>
+
+</body>
+</html>

@@ -1,0 +1,95 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<title>Lists</title>
+</head>
+
+<body>
+<h1>Lists</h1>
+
+<p>Lists can be entered in Symja with curly braces <code>{</code> and <code>}</code>:</p>
+<pre><code>&gt;&gt; mylist = {a, b, c, d}
+{a,b,c,d}
+</code></pre>
+<p>There are various functions for constructing lists:</p>
+<pre><code>&gt;&gt; Range(5)
+{1,2,3,4,5}
+ 
+&gt;&gt; Array(f, 4)
+{f(1),f(2),f(3),f(4)}
+
+&gt;&gt; ConstantArray(x, 4)
+{x,x,x,x}
+
+&gt;&gt; Table(n ^ 2, {n, 2, 5})
+{4,9,16,25}
+</code></pre>
+<p>The number of elements of a list can be determined with <code>Length</code>:</p>
+<pre><code>&gt;&gt; Length(mylist)
+4
+</code></pre>
+<p>Elements can be extracted using double square braces:</p>
+<pre><code>&gt;&gt; mylist[[3]]
+c
+</code></pre>
+<p>Negative indices count from the end:</p>
+<pre><code>&gt;&gt; mylist[[-3]]
+b
+</code></pre>
+<p>Lists can be nested:</p>
+<pre><code>&gt;&gt; mymatrix = {{1, 2}, {3, 4}, {5, 6}};
+</code></pre>
+<p>There are various ways of extracting elements from a list:</p>
+<pre><code>&gt;&gt; mymatrix[[2, 1]]
+3
+
+&gt;&gt; mymatrix[[;;, 2]]
+{2,4,6}
+
+&gt;&gt; Take(mylist, 3)
+{a,b,c}
+
+&gt;&gt; Take(mylist, -2)
+{c,d}
+
+&gt;&gt; Drop(mylist, 2)
+{c,d}
+
+&gt;&gt; First(mymatrix)
+{1,2}
+
+&gt;&gt; Last(mylist)
+d
+
+&gt;&gt; Most(mylist)
+{a,b,c}
+
+&gt;&gt; Rest(mylist)
+{b,c,d}
+</code></pre>
+<p>Lists can be used to assign values to multiple variables at once:</p>
+<pre><code>&gt;&gt; {a, b} = {1, 2};
+
+&gt;&gt; a
+1
+
+&gt;&gt; b
+2
+</code></pre>
+<p>Many operations, like addition and multiplication, “thread” over lists, i.e. lists are combined element-wise:</p>
+<pre><code>&gt;&gt; {1, 2, 3} + {4, 5, 6}
+{5,7,9}
+
+&gt;&gt; {1, 2, 3} * {4, 5, 6}
+{4,10,18}
+</code></pre>
+<p>It is an error to combine lists with unequal lengths:</p>
+<pre><code>&gt;&gt; {1, 2} + {4, 5, 6}
+Lists of unequal length cannot be combined: {1,2}+{4,5,6}
+{1,2}+{4,5,6}
+</code></pre>
+
+</body>
+</html>
