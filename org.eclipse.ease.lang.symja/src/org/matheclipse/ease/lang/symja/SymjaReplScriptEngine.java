@@ -65,7 +65,7 @@ public class SymjaReplScriptEngine extends AbstractReplScriptEngine {
 
 	private OutputFormFactory fInputFactory;
 
-	private static int counter = 1;
+	private int counter = 0;
 
 	PrintStream stdout;
 
@@ -156,6 +156,8 @@ public class SymjaReplScriptEngine extends AbstractReplScriptEngine {
 				stderr.println("Automatically closing brackets: " + postfix);
 				trimmedInput = trimmedInput + postfix;
 			}
+			counter = fEvaluator.getEvalEngine().getOutList().getCounter() + 1;
+
 			stdout.println("In [" + counter + "]: " + trimmedInput);
 			stdout.flush();
 			// if (console.fPrettyPrinter) {
@@ -163,7 +165,6 @@ public class SymjaReplScriptEngine extends AbstractReplScriptEngine {
 			// } else {
 			String result = resultPrinter(trimmedInput);
 			// }
-			counter++;
 			return result;
 		}
 		return "";// fEvaluator.eval(inputExpression);
