@@ -9,6 +9,8 @@
  - the [Eclipse EASE - scripting environment](https://www.eclipse.org/ease/)
  - the [Eclipse Nebula - Supplemental Custom Widgets](https://www.eclipse.org/nebula/) especially the [Nebula NatTable - high performance SWT data grid](https://www.eclipse.org/nattable/)
  
+ - an [example Github repository](https://github.com/axkr/symja_examples) contains some Symja example scripts.
+ 
  ## Usage
  
  ### Use Symja as a script shell
