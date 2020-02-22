@@ -18,7 +18,8 @@ The Symja editor supports *content assist* (press `Ctrl+SPACE` after typing the 
  
  ![Symja Editor syntax highlighting](ease_symja2.png)
  
-The `*.sym` file extension can also run as an EASE launch configuration
+The `*.sym` file extension can also be started as a Symja Script (EASE Script) launch configuration.
+The Script runs independent from the *Symja Script Shell* view
 
  ![Symja launch configuration](ease_symja3.png)
  
