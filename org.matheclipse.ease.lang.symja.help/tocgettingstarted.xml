@@ -2,7 +2,7 @@
 <?NLS TYPE="org.eclipse.help.toc"?>
 
 <toc label="Getting Started" link_to="toc.xml#gettingstarted"> 
-	<topic label="Getting started"  href="html/gettingstarted/01-getting-started.html" /> 
+	<topic label="Basic calculations"  href="html/gettingstarted/01-getting-started.html" /> 
 	<topic label="Symbols and assignments" href="html/gettingstarted/02-symbols-and-assignments.html" /> 
 	<topic label="Comparisons and boolean logic" href="html/gettingstarted/03-comparisons-and-boolean-logic.html" /> 
 	<topic label="Strings" href="html/gettingstarted/04-strings.html" /> 
@@ -13,8 +13,9 @@
 	<topic label="Scoping" href="html/gettingstarted/09-scoping.html" /> 
 	
 	<topic label="Expression types" href="html/gettingstarted/97-expression-types.html" /> 
-	
+	<!-- 
 	<topic label="Main Topic 2">
 		<topic label="Sub Topic 2" href="html/gettingstarted/subtopic2.html" />
 	</topic> 
+	-->
 </toc>
