@@ -44,7 +44,7 @@
             extensions="sym"
             contributorClass="org.matheclipse.ease.lang.symja.symjaeditor.SymjaActionContributor"
             class="org.matheclipse.ease.lang.symja.symjaeditor.SymjaEditor"
-            id="org.eclipse.ui.JavaEditor">
+            id="org.eclipse.ui.symjaeditor">
       </editor>
       
    </extension> 
@@ -73,8 +73,6 @@
             engineID="org.matheclipse.ease.engine.symja">
       </launchExtension> 
    </extension>
-   
-   
    
    <extension
          point="org.eclipse.ui.editors">
@@ -170,8 +168,7 @@
          </activeWhen>
          <!-- <enabledWhen></enabledWhen> -->
        </handler>
-       <!--
-       -->
+        
        <handler
              class="org.matheclipse.ease.lang.symja.tablesaw.commands.EditCopyCommandHandler"
              commandId="org.eclipse.ui.edit.copy">
@@ -191,4 +188,16 @@
          </activeWhen>
        </handler>
     </extension>
+    <!--
+    <extension
+          point="org.eclipse.ui.workbench.texteditor.hyperlinkDetectors">
+       <hyperlinkDetector
+             activate="true"
+             class="org.matheclipse.ease.lang.symja.SymjaHyperlinkDetector"
+             id="org.matheclipse.ease.lang.symja.hyperlinkdetector"
+             name="name"
+             targetId="org.eclipse.ui.DefaultTextEditor">
+       </hyperlinkDetector>
+    </extension>
+    -->
 </plugin>

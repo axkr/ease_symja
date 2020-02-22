@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
+	<classpathentry exported="true" kind="lib" path="lib/apfloat-1.10.0-SNAPSHOT.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/curvesapi-1.06.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/icu4j-65.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/RoaringBitmap-0.8.12.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/poi-ooxml-schemas-4.1.1.jar"/>
 	<classpathentry kind="lib" path="lib/poi-ooxml-4.1.1.jar"/>
@@ -21,7 +24,6 @@
 	<classpathentry kind="lib" path="lib/univocity-parsers-2.8.4.jar"/>
 	<classpathentry kind="lib" path="lib/matheclipse-core-1.0.0-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="lib/antlr4-runtime-4.7.jar"/>
-	<classpathentry kind="lib" path="lib/apfloat-1.9.1.jar"/>
 	<classpathentry kind="lib" path="lib/commonmark-0.14.0.jar"/>
 	<classpathentry kind="lib" path="lib/commonmark-ext-gfm-tables-0.14.0.jar"/>
 	<classpathentry kind="lib" path="lib/commons-csv-1.4.jar"/>
