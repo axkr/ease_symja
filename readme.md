@@ -5,10 +5,17 @@
  
  ## Requirements
  
- This plugin requires the installation of 
+ The Symja Eclipse EASE plugin requires the installation of 
  - the [Eclipse EASE - scripting environment](https://www.eclipse.org/ease/)
  - the [Eclipse Nebula - Supplemental Custom Widgets](https://www.eclipse.org/nebula/) especially the [Nebula NatTable - high performance SWT data grid](https://www.eclipse.org/nattable/)
  
+ ## Installation
+
+- Unzip the content of the [ease_symja.zip release file](https://github.com/axkr/ease_symja/releases) file into your `eclipse/dropins` folder.
+- Restart Eclipse.
+- Open the `EASE Script Shell` view to run a Symja command (open menu `Window->Show >View->Other...` and `Scripting->Script Shell`)
+- Create files with `*.sym` extension to run or edit Symja scripting files
+
  - an [example Github repository](https://github.com/axkr/symja_examples) contains some Symja example scripts.
  
  ## Usage
