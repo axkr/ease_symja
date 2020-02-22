@@ -1,7 +1,15 @@
-## Symja Eclipse EASE plugin
+# Symja Eclipse EASE plugin
  
  
 [Symja computer algebra language](https://github.com/axkr/symja_android_library) integration with [Eclipse EASE - scripting environment](https://www.eclipse.org/ease/) for the [Eclipse platform](https://www.eclipse.org/)
+ 
+ ## Requirements
+ 
+ This plugin requires the installation of 
+ - the [Eclipse EASE - scripting environment](https://www.eclipse.org/ease/)
+ - the [Eclipse Nebula - Supplemental Custom Widgets](https://www.eclipse.org/nebula/) especially the [Nebula NatTable - high performance SWT data grid](https://www.eclipse.org/nattable/)
+ 
+ ## Usage
  
  ### Use Symja as a script shell
  
