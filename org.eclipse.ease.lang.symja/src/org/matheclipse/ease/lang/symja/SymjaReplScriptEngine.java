@@ -106,13 +106,22 @@ public class SymjaReplScriptEngine extends AbstractReplScriptEngine {
 			}
 			if (f != null) {
 				String[] strResult = new String[] { "" };
+				stdout = getOutputStream();
+				stderr = getErrorStream();
 				// https://www.eclipse.org/articles/Article-Concurrency/jobs-api.html
 				Job job = new Job("Symja Job") {
 
 					protected IStatus run(IProgressMonitor monitor) {
-
+						ExprEvaluator evaluator = new ExprEvaluator(false, 10);
+						fOutputFactory = OutputFormFactory.get(true, false, 5, 7);
+						EvalEngine evalEngine = evaluator.getEvalEngine();
+						evalEngine.setFileSystemEnabled(true);
+						evalEngine.setOutPrintStream(stdout);
+						evalEngine.setErrorPrintStream(stderr);
+						
+						
 						final String absolutePath = f.getAbsolutePath();
-						IExpr result = fEvaluator.eval(F.Get(F.stringx(absolutePath)));
+						IExpr result = evaluator.eval(F.Get(F.stringx(absolutePath)));
 						if (result != null) {
 							String outString = printOutputForm(result);
 							stdout.println(outString);
