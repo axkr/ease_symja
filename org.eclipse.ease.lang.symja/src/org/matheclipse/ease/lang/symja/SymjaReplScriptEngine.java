@@ -14,6 +14,10 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.ease.AbstractReplScriptEngine;
 import org.eclipse.ease.Script;
 import org.eclipse.ease.ScriptEngineException;
@@ -92,21 +96,41 @@ public class SymjaReplScriptEngine extends AbstractReplScriptEngine {
 		String inputExpression = null;
 		if ((fileName != null) && (!fileName.isEmpty())) {
 			final Object file = script.getFile();
-			File f = null;
+			final File f;
 			if (file instanceof IFile) {
 				f = ((IFile) file).getLocation().toFile();
 			} else if (file instanceof File) {
 				f = ((File) file);
-
+			} else {
+				f = null;
 			}
 			if (f != null) {
-				final String absolutePath = f.getAbsolutePath();
-//				inputExpression = "Get(\"" + absolutePath + "\")";
-				IExpr result = fEvaluator.eval(F.Get(F.stringx(absolutePath)));
-				if (result != null) {
-					String outString = printOutputForm(result);
-					stdout.println(outString);
-					return outString;
+				String[] strResult = new String[] { "" };
+				Job job = new Job("Symja Job") {
+
+					protected IStatus run(IProgressMonitor monitor) {
+
+						final String absolutePath = f.getAbsolutePath();
+						IExpr result = fEvaluator.eval(F.Get(F.stringx(absolutePath)));
+						if (result != null) {
+							String outString = printOutputForm(result);
+							stdout.println(outString);
+							strResult[0] = outString;
+						} else {
+							strResult[0] = "";
+						}
+						return Status.OK_STATUS;
+					}
+				};
+				try {
+					job.setPriority(Job.SHORT);
+					job.schedule(); // start as soon as possible
+					job.join();
+					if (strResult[0] != null) {
+						return strResult[0];
+					}
+				} catch (InterruptedException iex) {
+					// user interrupted job
 				}
 				return "";
 			}
