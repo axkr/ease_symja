@@ -106,6 +106,7 @@ public class SymjaReplScriptEngine extends AbstractReplScriptEngine {
 			}
 			if (f != null) {
 				String[] strResult = new String[] { "" };
+				// https://www.eclipse.org/articles/Article-Concurrency/jobs-api.html
 				Job job = new Job("Symja Job") {
 
 					protected IStatus run(IProgressMonitor monitor) {
