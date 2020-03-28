@@ -29,7 +29,7 @@ public class CrossTableView extends DerivedTableView {
 	private Control rowCategorySelector;
 	private Control columnCategorySelector;
 	private Combo modeSelector;
-	private Button transButton;
+	private Button removeTotalButton, transButton;
 
 	@Override
 	protected void createConfigControls(final Composite configParent) {
@@ -41,22 +41,16 @@ public class CrossTableView extends DerivedTableView {
 		modeSelector = new Combo(configParent, SWT.READ_ONLY);
 		modeSelector.setItems("Count", "Row percent", "Column percent");
 		modeSelector.select(0);
-		modeSelector.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(final SelectionEvent e) {
-				updateTableControls();
-			}
-		});
+		modeSelector.addSelectionListener(configControlsUpdatedSelectionAdapter);
 		setControlLayout(modeSelector);
+		
 		transButton = new Button(configParent, SWT.CHECK);
 		transButton.setText("Transpose");
-		transButton.addSelectionListener(new SelectionAdapter() {
-		    @Override
-		    public void widgetSelected(final SelectionEvent e) {
-		        updateTableControls();
-		    }
-		});
-		transButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
+		transButton.addSelectionListener(configControlsUpdatedSelectionAdapter);
+
+		removeTotalButton = new Button(configParent, SWT.CHECK);
+		removeTotalButton.setText("Remove total row");
+		removeTotalButton.addSelectionListener(configControlsUpdatedSelectionAdapter);
 	}
 
 	@Override
@@ -98,6 +92,9 @@ public class CrossTableView extends DerivedTableView {
 				}
 				if (transButton.getSelection()) {
 				    derivedTables[0] = transposeTable(derivedTables[0]);
+				}
+				if (isCountMode() && removeTotalButton.getSelection()) {
+				    derivedTables[0] = derivedTables[0].dropRows(derivedTables[0].column(0).size() - 1);
 				}
 			}
 		}

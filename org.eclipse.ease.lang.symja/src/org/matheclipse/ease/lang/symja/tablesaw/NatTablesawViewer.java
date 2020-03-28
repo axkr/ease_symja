@@ -49,6 +49,7 @@ import org.eclipse.nebula.widgets.nattable.selection.SelectionLayer;
 import org.eclipse.nebula.widgets.nattable.selection.config.DefaultSelectionBindings;
 import org.eclipse.nebula.widgets.nattable.selection.config.DefaultSelectionLayerConfiguration;
 import org.eclipse.nebula.widgets.nattable.selection.event.ISelectionEvent;
+import org.eclipse.nebula.widgets.nattable.sort.SortHeaderLayer;
 import org.eclipse.nebula.widgets.nattable.style.DisplayMode;
 import org.eclipse.nebula.widgets.nattable.ui.binding.UiBindingRegistry;
 import org.eclipse.nebula.widgets.nattable.ui.matcher.CellEditorMouseEventMatcher;
@@ -131,6 +132,16 @@ public class NatTablesawViewer implements TableProvider, ISelectionProvider {
         return includeFilterRow;// && exprSupport != null;
     }
 
+    private boolean includeSortHeader = true;
+    
+    public void setIncludeSortHeader(final boolean includeSortHeader) {
+        this.includeSortHeader = includeSortHeader;
+    }
+    
+    public boolean shouldIncludeSortHeader() {
+        return includeSortHeader;
+    }
+
     public void createPartControl(final Composite parent) {
         bodyDataProvider = new TablesawDataProvider(input);
         bodyDataLayer = new TableCellChangeRecorderDataLayer(bodyDataProvider, defaultColumnWidth, defaultRowHeight);
@@ -166,6 +177,11 @@ public class NatTablesawViewer implements TableProvider, ISelectionProvider {
                     new CellEditorMouseEventMatcher(GridRegion.COLUMN_HEADER), new MouseEditAction());
             }
         });
+        
+        if (shouldIncludeSortHeader()) {
+            AbstractLayer sortHeaderLayer = new SortHeaderLayer<Object>(columnHeaderLayer, bodyDataProvider);
+            columnHeaderLayer = sortHeaderLayer;
+        }
 
 //        if (shouldIncludeFilterRow()) {
 //            // adds a UpdateDataCommandHandler (for the filter string)

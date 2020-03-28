@@ -3,8 +3,6 @@ package org.matheclipse.ease.lang.symja.tablesaw.views;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -20,8 +18,8 @@ import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuCreator;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IStatusLineManager;
+import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
-import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
@@ -68,6 +66,7 @@ import org.matheclipse.ease.lang.symja.tablesaw.NatTablesawEditor;
 import org.matheclipse.ease.lang.symja.tablesaw.TableProvider;
 import org.matheclipse.ease.lang.symja.tablesaw.TableProviderRegistry;
 import org.matheclipse.ease.lang.symja.tablesaw.util.MultiCheckSelectionCombo;
+import org.matheclipse.ease.lang.symja.tablesaw.util.MultiCheckSelectionShell;
 import org.matheclipse.ease.lang.symja.tablesaw.util.Util;
 
 import tech.tablesaw.aggregate.AggregateFunction;
@@ -186,36 +185,28 @@ public abstract class AbstractTablesawView extends ViewPart implements TableProv
 		createTableDataControls(parent);
 		configParent.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		updateView();
-		registerTableProvicer(this);
-		try {
-			updateViewAction = new Action("Refresh", ImageDescriptor.createFromURL(new URL("platform:/plugin/org.eclipse.search/icons/full/elcl16/refresh.png"))) {
-				@Override
-				public void run() {
-					updateTableControls();
-				}
-			};
-			spawnViewAction = new Action("Spawn", ImageDescriptor.createFromURL(new URL("platform:/plugin/org.eclipse.ui.views/icons/full/elcl16/new.png"))) {
-				@Override
-				public void run() {
-					final IWorkbenchPage page = getSite().getPage();
-					final String id = getSite().getId();
-					try {
-						page.showView(id, String.valueOf(page.getViewReferences().length), IWorkbenchPage.VIEW_ACTIVATE);
-					} catch (final PartInitException e) {
-						System.out.println(e);
-					}
-				}
-			};
-			getViewSite().getActionBars().getToolBarManager().add(updateViewAction);
-			getViewSite().getActionBars().getToolBarManager().add(spawnViewAction);
-		} catch (final MalformedURLException e) {
+		if (this instanceof TableProvider) {
+			SymjaPlugin.getDefault().getTableProviderRegistry().registerTableProvider(getPartName(), (TableProvider) this);
 		}
-		//		parent.addControlListener(new ControlAdapter() {
-		//			@Override
-		//			public void controlResized(final ControlEvent e) {
-		//				parent.layout();
-		//			}
-		//		});
+		linkViewAction = createSelectTableProviderAction();
+		updateViewAction = new Action("Refresh", Util.imageFromPlugin("org.eclipse.search", "/icons/full/elcl16/refresh.png")) {
+			@Override
+			public void run() {
+				updateTableControls();
+			}
+		};
+		spawnViewAction = new Action("Spawn", Util.imageFromPlugin("org.eclipse.ui.views", "/icons/full/elcl16/new.png")) {
+			@Override
+			public void run() {
+				final IWorkbenchPage page = getSite().getPage();
+				final String id = getSite().getId();
+				try {
+					page.showView(id, String.valueOf(page.getViewReferences().length), IWorkbenchPage.VIEW_ACTIVATE);
+				} catch (final PartInitException e) {
+					System.out.println(e);
+				}
+			}
+		};
 		addActions();
 	}
 
@@ -226,13 +217,17 @@ public abstract class AbstractTablesawView extends ViewPart implements TableProv
     }
 
 	protected void addActions() {
-        addTableRegistrySelectorMenuContribution();
+	    IToolBarManager toolBarManager = getViewSite().getActionBars().getToolBarManager();
+	    toolBarManager.add(createSelectTableProviderAction());
+        toolBarManager.add(updateViewAction);
+	    toolBarManager.add(spawnViewAction);
+//        addTableRegistrySelectorContribution();
         if (this instanceof TableProvider) {
-            getViewSite().getActionBars().getToolBarManager().add(createExportAction((TableProvider) this));
+            toolBarManager.add(createExportAction((TableProvider) this));
         }
     }
 	
-	protected void addTableRegistrySelectorMenuContribution() {
+	protected void addTableRegistrySelectorContribution() {
         final MenuManager tablesMenu = new MenuManager("Tables");
         tablesMenu.add(new Action() {}); // will be removed, needed for the submenu to actually show
         tablesMenu.setRemoveAllWhenShown(true);
@@ -256,6 +251,41 @@ public abstract class AbstractTablesawView extends ViewPart implements TableProv
         });
         getViewSite().getActionBars().getMenuManager().add(tablesMenu);
 	}
+
+	private MultiCheckSelectionShell selector;
+	
+    protected IAction createSelectTableProviderAction() {
+        selector = new MultiCheckSelectionShell(getTableViewerParent());
+        selector.setTitle("Select table: ");
+        selector.setMulti(false);
+        // cannot find location of button
+        selector.setUseCursorLocation(true);
+        selector.setNotifyOnSelection(true);
+        selector.addSelectionListener(new SelectionAdapter() {
+            @Override
+            public void widgetSelected(SelectionEvent event) {
+                String[] selections = selector.getSelections();
+                if (selections.length > 0) {
+                    String key = selections[0];
+                    tableProviderChanged(key);
+                    linkViewAction.setToolTipText(key);
+                    event.doit = true;
+                }
+            }
+        });
+        return new Action("Link", Util.imageFromPlugin("org.eclipse.ui.ide", "/icons/full/elcl16/synced.png")) {
+            @Override
+            public void run() {
+                TableProviderRegistry tableProviderRegistry = SymjaPlugin.getDefault().getTableProviderRegistry();
+                Collection<String> keys = tableProviderRegistry.getTableProviderKeys();
+                if (AbstractTablesawView.this instanceof TableProvider) {
+                    keys.remove(tableProviderRegistry.getTableProviderKey((TableProvider) AbstractTablesawView.this));
+                }
+                selector.setItems(keys.toArray(new String[keys.size()]), true);
+                selector.openShell();
+            }
+        };
+    }
 
     private void setDistinctPartName() {
 		final String partName = getPartName();
@@ -474,11 +504,13 @@ public abstract class AbstractTablesawView extends ViewPart implements TableProv
 		}
 	}
 
-	protected Action updateViewAction;
-	protected Action spawnViewAction;
+	protected IAction linkViewAction;
+	protected IAction updateViewAction;
+	protected IAction spawnViewAction;
 
 	protected void tableProviderChanged(final String key) {
-        tableProviderChanged(SymjaPlugin.getDefault().getTableProviderRegistry().getTableProvider(key));
+	    setTitleToolTip(key != null ? "Source table: " + key : "No source table");
+	    tableProviderChanged(SymjaPlugin.getDefault().getTableProviderRegistry().getTableProvider(key));
 	}
 
 	protected void tableProviderChanged(final TableProvider tableDataProvider) {
@@ -572,6 +604,13 @@ public abstract class AbstractTablesawView extends ViewPart implements TableProv
 		updateTableControls();
 	}
 
+	protected final SelectionListener configControlsUpdatedSelectionAdapter = new SelectionAdapter() {
+	    @Override
+	    public void widgetSelected(final SelectionEvent e) {
+	        configControlUpdated();
+	    }
+	};
+
 	protected Control createColumnControl(final Composite parent, final String label, final Boolean mode, final Class<?> columnClass) {
 		createControlLabel(parent, label);
 		final boolean multi = Boolean.TRUE.equals(mode);
@@ -582,22 +621,16 @@ public abstract class AbstractTablesawView extends ViewPart implements TableProv
 			}
 			return getColumnNames(table, columnClass);
 		};
-		final SelectionListener selectionListener = new SelectionAdapter() {
-			@Override
-			public void widgetSelected(final SelectionEvent e) {
-			    configControlUpdated();
-			}
-		};
 		Control control;
 		if (multi) {
-			final MultiCheckSelectionCombo combo = new MultiCheckSelectionCombo(parent, SWT.NONE);
+			final MultiCheckSelectionCombo combo = new MultiCheckSelectionCombo(parent, SWT.NONE, "select columns");
 			combo.setItemsProvider(itemsProvider);
-			combo.addSelectionListener(selectionListener);
+			combo.addSelectionListener(configControlsUpdatedSelectionAdapter);
 			control = combo;
 		} else {
 			final Combo combo = new Combo(parent, SWT.READ_ONLY);
 			combo.setItems(itemsProvider.get());
-			combo.addSelectionListener(selectionListener);
+			combo.addSelectionListener(configControlsUpdatedSelectionAdapter);
 			control = combo;
 		}
 		setControlLayout(control);
@@ -684,7 +717,7 @@ public abstract class AbstractTablesawView extends ViewPart implements TableProv
 		Control control;
 		final String[] itemsArray = items.toArray(new String[items.size()]);
 		if (multi) {
-			final MultiCheckSelectionCombo combo = new MultiCheckSelectionCombo(parent, SWT.NONE);
+			final MultiCheckSelectionCombo combo = new MultiCheckSelectionCombo(parent, SWT.NONE, "select aggregate function(s)");
 			combo.setItems(itemsArray);
 			combo.addSelectionListener(selectionListener);
 			control = combo;
