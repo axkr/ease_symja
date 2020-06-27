@@ -36,6 +36,7 @@ import org.matheclipse.ease.lang.symja.symjaeditor.symjadoc.SymjaDocScanner;
 import org.matheclipse.ease.lang.symja.symjaeditor.util.SymjaColorProvider;
 import org.matheclipse.ease.lang.symja.tablesaw.TableProviderRegistry;
 import org.matheclipse.ease.lang.symja.tablesaw.io.FileFormatSupport;
+import org.matheclipse.parser.client.FEConfig;
 import org.osgi.framework.BundleContext;
 
 import tech.tablesaw.api.Table;
@@ -123,7 +124,7 @@ public class SymjaPlugin extends AbstractUIPlugin {
 	}
 
 	public static void initialize() {
-		Config.PARSER_USE_LOWERCASE_SYMBOLS = true;
+		FEConfig.PARSER_USE_LOWERCASE_SYMBOLS = true;
 		Config.USE_VISJS = true;
 		Config.FILESYSTEM_ENABLED = true;
 		F.initSymbols(null, null, true);
